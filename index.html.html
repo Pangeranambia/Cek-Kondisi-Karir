@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV 2026 Prompt Generator</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1B4FD8;--blue-dk:#1540B8;--blue-lt:#EBF0FF;--blue-md:#BFCFFF;
+  --text:#111827;--text-2:#6B7280;--text-3:#9CA3AF;
+  --border:#E5E7EB;--bg:#F3F4F8;--surface:#fff;--surface-2:#F9FAFB;
+  --green:#059669;--green-lt:#ECFDF5;--radius:10px;--radius-lg:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+
+/* NAV */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:30px;height:30px;background:var(--blue);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:16px;height:16px;fill:#fff}
+.nav-title{font-size:14px;font-weight:700;letter-spacing:-0.01em}
+.nav-badge{font-size:10px;font-weight:600;padding:2px 8px;background:var(--blue-lt);color:var(--blue);border-radius:20px;letter-spacing:.04em}
+.nav-right{display:flex;gap:8px}
+.nav-pill{font-size:11px;padding:5px 12px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;font-family:inherit;transition:all .15s}
+.nav-pill:hover{border-color:var(--blue);color:var(--blue)}
+
+/* HERO */
+.hero{background:var(--surface);border-bottom:1px solid var(--border);padding:40px 24px 32px;text-align:center}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:var(--blue-lt);color:var(--blue);font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:.04em}
+.hero h1{font-size:clamp(24px,4vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:10px}
+.hero h1 span{color:var(--blue)}
+.hero p{font-size:14px;color:var(--text-2);max-width:480px;margin:0 auto 24px;line-height:1.65}
+.steps{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;max-width:560px;margin:0 auto}
+.step{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2);padding:4px 0}
+.step-dot{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-arr{color:var(--border);font-size:16px;padding:0 6px}
+
+/* LAYOUT */
+.main{max-width:1160px;margin:0 auto;padding:28px 20px 80px;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media(max-width:780px){.main{grid-template-columns:1fr;padding:18px 14px 60px}}
+
+/* PROGRESS */
+.progress-bar{height:3px;background:var(--blue-lt);border-radius:3px;margin-bottom:20px;overflow:hidden}
+.progress-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s ease}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:0}
+.card+.card{margin-top:16px}
+.card-hdr{padding:16px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-ico{width:32px;height:32px;border-radius:8px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-ico svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card-title{font-size:14px;font-weight:700}
+.card-sub{font-size:11px;color:var(--text-2);margin-top:1px}
+.card-body{padding:18px}
+
+/* TYPE TOGGLE */
+.type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.type-btn{padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface);cursor:pointer;text-align:left;transition:all .15s}
+.type-btn:hover{border-color:var(--blue-md);background:var(--blue-lt)}
+.type-btn.active{border-color:var(--blue);background:var(--blue-lt)}
+.type-btn-label{font-size:13px;font-weight:600;display:block}
+.type-btn-sub{font-size:11px;color:var(--text-2);margin-top:2px}
+.type-btn.active .type-btn-label{color:var(--blue)}
+
+/* SECTION ACCORDION */
+.sec{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:box-shadow .2s}
+.sec.active{box-shadow:0 0 0 2px var(--blue-md)}
+.sec-hdr{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;background:var(--surface-2)}
+.sec-hdr:hover{background:var(--blue-lt)}
+.sec.active .sec-hdr{background:var(--blue-lt)}
+.sec-left{display:flex;align-items:center;gap:10px}
+.sec-num{width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--text-2);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.sec.active .sec-num,.sec.done .sec-num{background:var(--blue);color:#fff}
+.sec.done .sec-num::after{content:'✓'}
+.sec.done:not(.active) .sec-num{background:var(--green);font-size:11px}
+.sec-info{}
+.sec-label{font-size:13px;font-weight:600}
+.sec-hint{font-size:11px;color:var(--text-2);margin-top:1px}
+.sec-chevron{font-size:14px;color:var(--text-3);transition:transform .2s}
+.sec.active .sec-chevron{transform:rotate(180deg);color:var(--blue)}
+.sec-body{display:none;padding:14px}
+.sec.active .sec-body{display:block}
+.sec-required{font-size:10px;font-weight:600;color:var(--blue);background:var(--blue-lt);padding:2px 7px;border-radius:10px;margin-left:6px}
+.sec-optional{font-size:10px;color:var(--text-3);margin-left:6px}
+
+/* FIELDS */
+.field{margin-bottom:13px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:.01em}
+.fhint{font-size:11px;color:var(--text-2);margin-bottom:5px;line-height:1.45;padding:6px 9px;background:var(--surface-2);border-radius:6px;border-left:2px solid var(--blue-md)}
+.fhint strong{color:var(--blue)}
+.fexample{font-size:11px;color:var(--text-3);margin-top:4px;font-style:italic}
+input[type=text],textarea,select{width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);transition:border-color .15s,box-shadow .15s;outline:none;resize:none;line-height:1.5}
+input[type=text]::placeholder,textarea::placeholder{color:var(--text-3)}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,79,216,.1)}
+textarea{min-height:80px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.row2{grid-template-columns:1fr}}
+
+/* TAGS */
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:11px;padding:3px 9px;border:1px solid var(--border);border-radius:20px;background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:all .12s;font-family:inherit}
+.tag:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt)}
+
+/* EXPERIENCE ENTRIES */
+.exp-entries{display:flex;flex-direction:column;gap:10px}
+.exp-entry{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.exp-entry-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface-2);font-size:12px;font-weight:600;color:var(--text-2)}
+.exp-entry-body{padding:12px}
+.btn-add{width:100%;padding:9px;border:1.5px dashed var(--border);border-radius:var(--radius);background:none;color:var(--text-2);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-add:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt)}
+.btn-remove{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;transition:all .12s}
+.btn-remove:hover{color:#EF4444;background:#FEF2F2}
+
+/* GENERATE */
+.btn-gen{width:100%;padding:13px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px}
+.btn-gen:hover{background:var(--blue-dk)}
+.btn-gen:active{transform:scale(.99)}
+.btn-gen svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* OUTPUT */
+.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:380px;text-align:center;padding:32px;color:var(--text-3)}
+.placeholder svg{width:44px;height:44px;stroke:var(--border);fill:none;stroke-width:1.5;margin-bottom:12px}
+.placeholder p{font-size:13px;line-height:1.65}
+
+/* CV DOC */
+.cv-doc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;font-size:12px;line-height:1.65;color:var(--text)}
+.cv-name{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.cv-role{font-size:12px;color:var(--blue);font-weight:600;margin-top:2px}
+.cv-contacts{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--text-2)}
+.cv-contact{display:flex;align-items:center;gap:4px}
+.cv-contact svg{width:11px;height:11px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.cv-sec-title{font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;border-bottom:2px solid var(--blue);padding-bottom:3px;margin:14px 0 8px}
+.cv-summary-box{font-size:11.5px;color:var(--text-2);line-height:1.7;background:var(--blue-lt);border-radius:7px;padding:10px 12px}
+.cv-summary-box strong{color:var(--blue)}
+.cv-exp-hdr{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:3px}
+.cv-exp-title{font-size:12px;font-weight:700}
+.cv-exp-company{font-size:11px;color:var(--blue);font-weight:600}
+.cv-exp-period{font-size:10px;color:var(--text-3)}
+.cv-bullets{margin-top:5px;padding-left:0;list-style:none}
+.cv-bullets li{font-size:11px;color:var(--text-2);padding:2px 0 2px 13px;position:relative;line-height:1.55}
+.cv-bullets li::before{content:'▸';position:absolute;left:0;color:var(--blue);font-size:9px;top:3px}
+.cv-bullets li strong{color:var(--text);font-weight:600}
+.cv-edu-item{margin-bottom:6px}
+.cv-edu-deg{font-size:12px;font-weight:700}
+.cv-edu-school{font-size:11px;color:var(--text-2)}
+.cv-tags{display:flex;flex-wrap:wrap;gap:5px}
+.cv-tag{font-size:10px;padding:2px 8px;background:var(--surface-2);border:1px solid var(--border);border-radius:20px;color:var(--text-2);font-weight:500}
+.cv-exp-block{margin-bottom:10px}
+.cv-exp-block:last-child{margin-bottom:0}
+
+/* PROMPT BOX */
+.prompt-wrap{margin-top:14px}
+.prompt-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#1E293B;border-radius:var(--radius) var(--radius) 0 0}
+.prompt-dots{display:flex;gap:5px}
+.prompt-dot{width:10px;height:10px;border-radius:50%}
+.prompt-dot:nth-child(1){background:#FF5F57}
+.prompt-dot:nth-child(2){background:#FFBD2E}
+.prompt-dot:nth-child(3){background:#28C840}
+.prompt-label{font-size:11px;color:#94A3B8;font-weight:500;margin-left:8px}
+.copy-btn{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#CBD5E1;font-size:12px;font-weight:500;padding:5px 11px;border-radius:6px;cursor:pointer;font-family:inherit;transition:all .15s}
+.copy-btn:hover{background:rgba(255,255,255,.18);color:#fff}
+.copy-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.prompt-text{background:#0F172A;color:#E2E8F0;font-family:'SF Mono','Fira Code','Courier New',monospace;font-size:11.5px;line-height:1.75;padding:16px;border-radius:0 0 var(--radius) var(--radius);white-space:pre-wrap;word-break:break-word;max-height:380px;overflow-y:auto}
+
+/* ACTION BAR */
+.action-bar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.abtn{flex:1;min-width:110px;padding:9px 14px;border-radius:var(--radius);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.abtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.abtn-primary{background:var(--blue);color:#fff;border:none}
+.abtn-primary:hover{background:var(--blue-dk)}
+.abtn-secondary{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+.abtn-secondary:hover{border-color:var(--blue);color:var(--blue)}
+.abtn-green{background:var(--green-lt);color:var(--green);border:1.5px solid #A7F3D0}
+.abtn-green:hover{background:#D1FAE5}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#1E293B;color:#fff;padding:11px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.15);transform:translateY(80px);opacity:0;transition:all .25s ease;z-index:999;display:flex;align-items:center;gap:8px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast svg{width:15px;height:15px;stroke:#4ADE80;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+footer{text-align:center;padding:18px;font-size:11px;color:var(--text-3);border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    </div>
+    <span class="nav-title">CV 2026 Generator</span>
+    <span class="nav-badge">PRO</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-pill" onclick="resetAll()">Reset Form</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-pill">⚡ Siap digunakan di Claude · ChatGPT · Gemini</div>
+  <h1>Ubah CV biasa jadi<br><span>CV yang dilirik HR</span></h1>
+  <p>Isi tiap section dengan lengkap — semakin detail datamu, semakin kuat prompt yang dihasilkan.</p>
+  <div class="steps">
+    <div class="step"><div class="step-dot">1</div>Isi tiap section</div>
+    <div class="step-arr">→</div>
+    <div class="step"><div class="step-dot">2</div>Generate prompt</div>
+    <div class="step-arr">→</div>
+    <div class="step"><div class="step-dot">3</div>Paste ke AI</div>
+    <div class="step-arr">→</div>
+    <div class="step"><div class="step-dot">4</div>CV siap kirim</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ============ LEFT: FORM ============ -->
+<div>
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-ico"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div><div class="card-title">Form CV Lengkap</div><div class="card-sub">Isi semua section untuk prompt terbaik</div></div>
+    </div>
+    <div class="card-body">
+
+      <!-- PROGRESS -->
+      <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+      <!-- TYPE -->
+      <div class="type-toggle">
+        <button class="type-btn active" id="btn-pro" onclick="setType('pro')">
+          <span class="type-btn-label">💼 Profesional</span>
+          <span class="type-btn-sub">Punya pengalaman kerja</span>
+        </button>
+        <button class="type-btn" id="btn-fresh" onclick="setType('fresh')">
+          <span class="type-btn-label">🎓 Fresh Graduate</span>
+          <span class="type-btn-sub">Baru lulus / mau pertama kerja</span>
+        </button>
+      </div>
+
+      <!-- ===== SECTION 1: BIODATA ===== -->
+      <div class="sec active" id="sec1">
+        <div class="sec-hdr" onclick="toggleSec('sec1')">
+          <div class="sec-left">
+            <div class="sec-num">1</div>
+            <div class="sec-info">
+              <div class="sec-label">Biodata <span class="sec-required">WAJIB</span></div>
+              <div class="sec-hint">Identitas profesional yang tampil di header CV</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">📌 <strong>CV 2026:</strong> Hilangkan foto, umur, agama, status pernikahan, dan alamat lengkap. Hanya tampilkan info yang relevan untuk pekerjaan.</div>
+          <div class="row2">
+            <div class="field">
+              <label>Nama Lengkap *</label>
+              <input type="text" id="nama" placeholder="Andi Pratama" oninput="updateProgress()">
+              <div class="fexample">Gunakan nama yang konsisten dengan LinkedIn</div>
+            </div>
+            <div class="field">
+              <label>Kota Domisili *</label>
+              <input type="text" id="kota" placeholder="Jakarta" oninput="updateProgress()">
+              <div class="fexample">Cukup kota, tanpa alamat lengkap</div>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Email Profesional *</label>
+              <input type="text" id="email" placeholder="nama@gmail.com" oninput="updateProgress()">
+              <div class="fexample">Hindari email seperti gaul2001@...</div>
+            </div>
+            <div class="field">
+              <label>Nomor HP</label>
+              <input type="text" id="hp" placeholder="+62 812 3456 7890">
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>LinkedIn URL</label>
+              <input type="text" id="linkedin" placeholder="linkedin.com/in/andipratama">
+              <div class="fexample">Pastikan profil LinkedIn sudah diperbarui</div>
+            </div>
+            <div class="field">
+              <label>Portfolio / Website <span style="font-weight:400;color:var(--text-3)">(opsional)</span></label>
+              <input type="text" id="portfolio" placeholder="github.com/nama atau nama.com">
+            </div>
+          </div>
+          <div class="field">
+            <label>Posisi yang Dilamar *</label>
+            <input type="text" id="posisi" placeholder="HR Business Partner / Senior Marketing Manager" oninput="updateProgress()">
+            <div class="fexample">Tulis spesifik — ini jadi fokus seluruh CV kamu</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 2: PROFESSIONAL SUMMARY ===== -->
+      <div class="sec" id="sec2">
+        <div class="sec-hdr" onclick="toggleSec('sec2')">
+          <div class="sec-left">
+            <div class="sec-num">2</div>
+            <div class="sec-info">
+              <div class="sec-label">Professional Summary <span class="sec-required">WAJIB</span></div>
+              <div class="sec-hint">Alasan kenapa HR harus lanjut membaca CV kamu</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">📌 <strong>CV 2026:</strong> Summary bukan perkenalan biasa. Ini adalah highlight card kamu — pengalaman, angka, tools, dan dampak bisnis dalam 3–5 kalimat.</div>
+          <div class="row2">
+            <div class="field">
+              <label>Total Tahun Pengalaman *</label>
+              <input type="text" id="tahun" placeholder="8 tahun / 12+ tahun" oninput="updateProgress()">
+            </div>
+            <div class="field" id="posisi-saat-ini-wrap">
+              <label>Posisi Saat Ini</label>
+              <input type="text" id="posisi_skrg" placeholder="HR Manager at PT XYZ">
+            </div>
+          </div>
+          <div class="field">
+            <label>Industri yang Pernah Ditangani *</label>
+            <input type="text" id="industri" placeholder="FMCG, Startup, Digital, Perbankan, Retail" oninput="updateProgress()">
+            <div class="fexample">Pisahkan dengan koma</div>
+            <div class="tags">
+              <button class="tag" onclick="addTag('industri','FMCG')">+ FMCG</button>
+              <button class="tag" onclick="addTag('industri','Startup')">+ Startup</button>
+              <button class="tag" onclick="addTag('industri','Digital')">+ Digital</button>
+              <button class="tag" onclick="addTag('industri','Perbankan')">+ Perbankan</button>
+              <button class="tag" onclick="addTag('industri','Retail')">+ Retail</button>
+              <button class="tag" onclick="addTag('industri','Teknologi')">+ Teknologi</button>
+              <button class="tag" onclick="addTag('industri','Healthcare')">+ Healthcare</button>
+              <button class="tag" onclick="addTag('industri','Manufacturing')">+ Manufacturing</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Team Size yang Pernah Dikelola</label>
+            <input type="text" id="team_size" placeholder="10–50 orang / 300+ karyawan di 9 negara">
+          </div>
+          <div class="field">
+            <label>Pencapaian Utama dengan Angka *</label>
+            <div class="fhint">💡 <strong>Tips:</strong> Angka = daya tarik terbesar. Tulis 2–4 pencapaian paling impactful. Format: <em>apa yang dicapai + seberapa besar + dengan cara apa</em></div>
+            <textarea id="pencapaian" placeholder="Contoh:
+- Mengurangi hiring turnaround time 50% dengan ATS + AI screening
+- Meningkatkan produktivitas tim 30% lewat performance framework baru
+- Memimpin HR transformation di 9 negara untuk 300+ karyawan
+- Menurunkan employee turnover dari 25% ke 12% dalam 1 tahun" oninput="updateProgress()"></textarea>
+          </div>
+          <div class="field">
+            <label>Aktivitas Profesional Lain</label>
+            <input type="text" id="prof_aktivitas" placeholder="Career Coach, Speaker, Mentor, Advisor, Content Creator">
+            <div class="fexample">Ini meningkatkan personal brand kamu secara signifikan</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 3: EXPERIENCE ===== -->
+      <div class="sec" id="sec3">
+        <div class="sec-hdr" onclick="toggleSec('sec3')">
+          <div class="sec-left">
+            <div class="sec-num">3</div>
+            <div class="sec-info">
+              <div class="sec-label">Experience <span class="sec-required">WAJIB</span></div>
+              <div class="sec-hint">Hasil menjelaskan nilaimu, bukan deskripsi tugas</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">📌 <strong>CV 2026:</strong> Setiap bullet = <strong>Hasil + Skill/Tools + Dampak Bisnis (angka)</strong>. Bukan "Responsible for..." tapi "Reduced X by Y% using Z."</div>
+          <div class="exp-entries" id="exp-entries-pro">
+            <!-- Entry 1 -->
+            <div class="exp-entry" id="exp0">
+              <div class="exp-entry-hdr">
+                <span>Pengalaman Kerja #1 <span style="color:var(--blue);font-size:10px">(Terbaru)</span></span>
+                <button class="btn-remove" onclick="removeExp('exp0')" title="Hapus">×</button>
+              </div>
+              <div class="exp-entry-body">
+                <div class="row2">
+                  <div class="field">
+                    <label>Jabatan / Posisi</label>
+                    <input type="text" class="exp-jabatan" placeholder="HR Business Partner">
+                  </div>
+                  <div class="field">
+                    <label>Nama Perusahaan</label>
+                    <input type="text" class="exp-company" placeholder="PT Maju Sejahtera">
+                  </div>
+                </div>
+                <div class="row2">
+                  <div class="field">
+                    <label>Periode</label>
+                    <input type="text" class="exp-period" placeholder="Jan 2022 – Sekarang">
+                  </div>
+                  <div class="field">
+                    <label>Lokasi</label>
+                    <input type="text" class="exp-loc" placeholder="Jakarta / Remote / 9 Negara">
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Pencapaian & Dampak (per bullet)</label>
+                  <div class="fhint">Tulis 3–5 pencapaian. Format: <strong>Apa yang dicapai</strong> + skill/tools yang dipakai + angka dampaknya</div>
+                  <textarea class="exp-bullets" rows="4" placeholder="- Reduced hiring turnaround time by 50% using ATS and AI-screening tools
+- Improved team productivity 30% by building performance management framework
+- Supported 300+ employees across 9 countries through workforce analytics
+- Implemented AI-powered HR workflows using ChatGPT & Gemini"></textarea>
+                </div>
+                <div class="field">
+                  <label>Tools yang Digunakan di Posisi Ini</label>
+                  <input type="text" class="exp-tools" placeholder="SAP, Workday, ChatGPT, ATS, Tableau">
+                </div>
+              </div>
+            </div>
+            <!-- Entry 2 -->
+            <div class="exp-entry" id="exp1">
+              <div class="exp-entry-hdr">
+                <span>Pengalaman Kerja #2</span>
+                <button class="btn-remove" onclick="removeExp('exp1')" title="Hapus">×</button>
+              </div>
+              <div class="exp-entry-body">
+                <div class="row2">
+                  <div class="field">
+                    <label>Jabatan / Posisi</label>
+                    <input type="text" class="exp-jabatan" placeholder="HR Supervisor">
+                  </div>
+                  <div class="field">
+                    <label>Nama Perusahaan</label>
+                    <input type="text" class="exp-company" placeholder="PT Berkah Mandiri">
+                  </div>
+                </div>
+                <div class="row2">
+                  <div class="field">
+                    <label>Periode</label>
+                    <input type="text" class="exp-period" placeholder="Mar 2019 – Des 2021">
+                  </div>
+                  <div class="field">
+                    <label>Lokasi</label>
+                    <input type="text" class="exp-loc" placeholder="Surabaya">
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Pencapaian & Dampak (per bullet)</label>
+                  <textarea class="exp-bullets" rows="3" placeholder="- Menurunkan turnover dari 25% ke 12% dalam 1 tahun
+- Membangun sistem onboarding yang mengurangi waktu adaptasi 40%"></textarea>
+                </div>
+                <div class="field">
+                  <label>Tools yang Digunakan</label>
+                  <input type="text" class="exp-tools" placeholder="HRIS, Excel, Google Workspace">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- FRESH GRAD ACTIVITIES -->
+          <div class="exp-entries" id="exp-entries-fresh" style="display:none">
+            <div class="exp-entry" id="act0">
+              <div class="exp-entry-hdr">
+                <span>Aktivitas / Pengalaman #1 <span style="color:var(--blue);font-size:10px">(Paling relevan)</span></span>
+                <button class="btn-remove" onclick="removeExp('act0')" title="Hapus">×</button>
+              </div>
+              <div class="exp-entry-body">
+                <div class="row2">
+                  <div class="field">
+                    <label>Peran / Jabatan</label>
+                    <input type="text" class="exp-jabatan" placeholder="Ketua Divisi HR — BEM Fakultas">
+                  </div>
+                  <div class="field">
+                    <label>Nama Organisasi / Tempat</label>
+                    <input type="text" class="exp-company" placeholder="BEM Universitas Indonesia">
+                  </div>
+                </div>
+                <div class="row2">
+                  <div class="field">
+                    <label>Periode</label>
+                    <input type="text" class="exp-period" placeholder="Jan 2023 – Des 2023">
+                  </div>
+                  <div class="field">
+                    <label>Tipe</label>
+                    <select class="exp-loc">
+                      <option value="Organisasi Kampus">Organisasi Kampus</option>
+                      <option value="Magang">Magang</option>
+                      <option value="Project Kampus">Project Kampus</option>
+                      <option value="Kompetisi">Kompetisi</option>
+                      <option value="Volunteer">Volunteer</option>
+                      <option value="Freelance">Freelance</option>
+                      <option value="Kepanitiaan">Kepanitiaan</option>
+                      <option value="Penelitian">Penelitian</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Kontribusi & Hasil</label>
+                  <div class="fhint">Tulis apa yang kamu lakukan, skill yang dipakai, dan hasilnya (angka/skala jika ada)</div>
+                  <textarea class="exp-bullets" rows="3" placeholder="- Led recruitment of 30+ new members using structured interview framework
+- Organized seminar attended by 500+ participants, end-to-end logistics
+- Increased member engagement 40% through training programs"></textarea>
+                </div>
+                <div class="field">
+                  <label>Skills / Tools yang Digunakan</label>
+                  <input type="text" class="exp-tools" placeholder="Excel, Canva, komunikasi, leadership">
+                </div>
+              </div>
+            </div>
+            <div class="exp-entry" id="act1">
+              <div class="exp-entry-hdr">
+                <span>Aktivitas / Pengalaman #2</span>
+                <button class="btn-remove" onclick="removeExp('act1')" title="Hapus">×</button>
+              </div>
+              <div class="exp-entry-body">
+                <div class="row2">
+                  <div class="field">
+                    <label>Peran / Jabatan</label>
+                    <input type="text" class="exp-jabatan" placeholder="Intern HR Generalist">
+                  </div>
+                  <div class="field">
+                    <label>Nama Organisasi / Tempat</label>
+                    <input type="text" class="exp-company" placeholder="PT XYZ">
+                  </div>
+                </div>
+                <div class="row2">
+                  <div class="field">
+                    <label>Periode</label>
+                    <input type="text" class="exp-period" placeholder="Jun – Agu 2024">
+                  </div>
+                  <div class="field">
+                    <label>Tipe</label>
+                    <select class="exp-loc">
+                      <option value="Magang">Magang</option>
+                      <option value="Organisasi Kampus">Organisasi Kampus</option>
+                      <option value="Project Kampus">Project Kampus</option>
+                      <option value="Kompetisi">Kompetisi</option>
+                      <option value="Volunteer">Volunteer</option>
+                      <option value="Freelance">Freelance</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Kontribusi & Hasil</label>
+                  <textarea class="exp-bullets" rows="3" placeholder="- Assisted recruitment of 20 employees in 3 months using ATS
+- Created onboarding materials that reduced adaptation time by 30%"></textarea>
+                </div>
+                <div class="field">
+                  <label>Skills / Tools yang Digunakan</label>
+                  <input type="text" class="exp-tools" placeholder="ATS, Google Suite, komunikasi">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn-add" onclick="addExpEntry()">＋ Tambah Pengalaman Lagi</button>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 4: EDUCATION ===== -->
+      <div class="sec" id="sec4">
+        <div class="sec-hdr" onclick="toggleSec('sec4')">
+          <div class="sec-left">
+            <div class="sec-num">4</div>
+            <div class="sec-info">
+              <div class="sec-label">Education</div>
+              <div class="sec-hint">Formal education — urutkan dari yang terbaru</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">📌 <strong>CV 2026:</strong> Untuk profesional berpengalaman, cukup tampilkan S1 ke atas. Degree gets you noticed — skills & certifications get you hired.</div>
+          <div class="field">
+            <label>Pendidikan Terakhir (S2 / S1)</label>
+            <div class="row2">
+              <input type="text" id="edu1_deg" placeholder="S1 Psikologi / S2 Manajemen">
+              <input type="text" id="edu1_univ" placeholder="Universitas Indonesia">
+            </div>
+            <div class="row2" style="margin-top:8px">
+              <input type="text" id="edu1_year" placeholder="2015 – 2019">
+              <input type="text" id="edu1_ipk" placeholder="IPK 3.75 (opsional)">
+            </div>
+          </div>
+          <div class="field" id="edu2-wrap">
+            <label>Pendidikan Sebelumnya <span style="font-weight:400;color:var(--text-3)">(opsional)</span></label>
+            <div class="row2">
+              <input type="text" id="edu2_deg" placeholder="S1 Hukum">
+              <input type="text" id="edu2_univ" placeholder="Universitas Gadjah Mada">
+            </div>
+            <div class="row2" style="margin-top:8px">
+              <input type="text" id="edu2_year" placeholder="2011 – 2015">
+              <input type="text" id="edu2_ipk" placeholder="IPK (opsional)">
+            </div>
+          </div>
+          <div class="field" id="matkul-wrap">
+            <label>Mata Kuliah Relevan <span style="font-weight:400;color:var(--text-3)">(opsional, untuk fresh grad)</span></label>
+            <input type="text" id="matkul" placeholder="Psikologi Industri, Manajemen SDM, Statistika, Business Analytics">
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 5: CERTIFICATION ===== -->
+      <div class="sec" id="sec5">
+        <div class="sec-hdr" onclick="toggleSec('sec5')">
+          <div class="sec-left">
+            <div class="sec-num">5</div>
+            <div class="sec-info">
+              <div class="sec-label">Certification & Learning</div>
+              <div class="sec-hint">Sertifikasi yang membuktikan kompetensimu hari ini</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">📌 <strong>CV 2026:</strong> Hanya sertifikasi profesional dan tools yang masih relevan. <strong>Hilangkan</strong> seminar dan sertifikat partisipasi tanpa kompetensi.</div>
+          <div class="field">
+            <label>Sertifikasi Profesional</label>
+            <textarea id="sertif_pro" rows="3" placeholder="- CPHRM (Certified Professional in Human Resources Management)
+- CHRBP (Certified HR Business Partner)
+- PMP (Project Management Professional) — PMI, 2023
+- CFA Level 1 — CFA Institute, 2024"></textarea>
+            <div class="tags" style="margin-top:6px">
+              <button class="tag" onclick="addTagArea('sertif_pro','- CPHRM')">+ CPHRM</button>
+              <button class="tag" onclick="addTagArea('sertif_pro','- CHRBP')">+ CHRBP</button>
+              <button class="tag" onclick="addTagArea('sertif_pro','- SHRM-CP')">+ SHRM-CP</button>
+              <button class="tag" onclick="addTagArea('sertif_pro','- PMP')">+ PMP</button>
+              <button class="tag" onclick="addTagArea('sertif_pro','- CFA')">+ CFA</button>
+              <button class="tag" onclick="addTagArea('sertif_pro','- Google Analytics')">+ Google Analytics</button>
+              <button class="tag" onclick="addTagArea('sertif_pro','- AWS Certified')">+ AWS</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Sertifikasi Tools / Platform</label>
+            <textarea id="sertif_tools" rows="2" placeholder="- HR Analytics — Udemy, 2024
+- People Analytics — Reforge, 2023
+- AI for Business — Coursera, 2024
+- Data Analytics — Google, 2023"></textarea>
+            <div class="tags" style="margin-top:6px">
+              <button class="tag" onclick="addTagArea('sertif_tools','- AI for Business — Coursera')">+ AI Coursera</button>
+              <button class="tag" onclick="addTagArea('sertif_tools','- Google Data Analytics')">+ Google Data</button>
+              <button class="tag" onclick="addTagArea('sertif_tools','- HR Analytics — Udemy')">+ HR Analytics</button>
+              <button class="tag" onclick="addTagArea('sertif_tools','- Digital Marketing — Meta')">+ Digital Mktg</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Program Leadership / Lainnya <span style="font-weight:400;color:var(--text-3)">(opsional)</span></label>
+            <input type="text" id="sertif_leader" placeholder="Leadership Program XYZ, Executive Education Harvard Online">
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 6: SKILLS ===== -->
+      <div class="sec" id="sec6">
+        <div class="sec-hdr" onclick="toggleSec('sec6')">
+          <div class="sec-left">
+            <div class="sec-num">6</div>
+            <div class="sec-info">
+              <div class="sec-label">Skills & Tools</div>
+              <div class="sec-hint">Skill kuat terlihat dari impact, bukan daftar kata</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">📌 <strong>CV 2026:</strong> Skills diintegrasikan ke dalam experience — bukan daftar bullet terpisah. Tulis di sini sebagai referensi untuk AI agar bisa menyelipkannya ke context yang tepat.</div>
+          <div class="field">
+            <label>Hard Skills / Technical Skills</label>
+            <input type="text" id="hard_skills" placeholder="Talent Acquisition, Performance Management, Data Analysis, People Analytics">
+            <div class="tags">
+              <button class="tag" onclick="addTag('hard_skills','Talent Acquisition')">+ Talent Acq.</button>
+              <button class="tag" onclick="addTag('hard_skills','Performance Management')">+ Perf. Mgmt</button>
+              <button class="tag" onclick="addTag('hard_skills','Organization Design')">+ Org Design</button>
+              <button class="tag" onclick="addTag('hard_skills','People Analytics')">+ People Analytics</button>
+              <button class="tag" onclick="addTag('hard_skills','HR Transformation')">+ HR Transformation</button>
+              <button class="tag" onclick="addTag('hard_skills','Employer Branding')">+ Employer Branding</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Tools / Software</label>
+            <input type="text" id="tools_all" placeholder="ChatGPT, Gemini, SAP, Workday, Tableau, Power BI, ATS">
+            <div class="tags">
+              <button class="tag" onclick="addTag('tools_all','ChatGPT')">+ ChatGPT</button>
+              <button class="tag" onclick="addTag('tools_all','Gemini')">+ Gemini</button>
+              <button class="tag" onclick="addTag('tools_all','SAP')">+ SAP</button>
+              <button class="tag" onclick="addTag('tools_all','Workday')">+ Workday</button>
+              <button class="tag" onclick="addTag('tools_all','Tableau')">+ Tableau</button>
+              <button class="tag" onclick="addTag('tools_all','Power BI')">+ Power BI</button>
+              <button class="tag" onclick="addTag('tools_all','ATS')">+ ATS</button>
+              <button class="tag" onclick="addTag('tools_all','Figma')">+ Figma</button>
+              <button class="tag" onclick="addTag('tools_all','Python')">+ Python</button>
+              <button class="tag" onclick="addTag('tools_all','Excel')">+ Excel</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Bahasa</label>
+            <input type="text" id="bahasa" placeholder="Bahasa Indonesia (Native), English (Fluent / B2), Mandarin (Basic)">
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 7: OTHER INFO ===== -->
+      <div class="sec" id="sec7">
+        <div class="sec-hdr" onclick="toggleSec('sec7')">
+          <div class="sec-left">
+            <div class="sec-num">7</div>
+            <div class="sec-info">
+              <div class="sec-label">Other Information <span class="sec-optional">(opsional)</span></div>
+              <div class="sec-hint">Reputasi profesional yang membuatmu dipercaya</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">📌 <strong>CV 2026:</strong> Hobi membuatmu menarik — reputasi profesional membuatmu <strong>dipercaya</strong>. Prioritaskan portfolio, publikasi, dan awards.</div>
+          <div class="field">
+            <label>Portfolio / Project Hasil Kerja</label>
+            <textarea id="other_portfolio" rows="2" placeholder="- HR Dashboard & People Analytics Project (github.com/nama)
+- Artikel LinkedIn tentang People Strategy (1.2K views)
+- Employee Engagement Survey Framework (available upon request)"></textarea>
+          </div>
+          <div class="field">
+            <label>Publikasi / Konten</label>
+            <input type="text" id="other_pub" placeholder="Artikel di LinkedIn / Medium / Jurnal tentang [topik]">
+          </div>
+          <div class="field">
+            <label>Speaker Activities / Webinar</label>
+            <input type="text" id="other_speaker" placeholder="Speaker: HR Strategy in Digital Era — Webinar Prasetiya Mulya 2024">
+          </div>
+          <div class="field">
+            <label>Awards & Recognition</label>
+            <input type="text" id="other_awards" placeholder="Best Employee 2023 — PT Maju Sejahtera, Top 10% Performer 2022">
+          </div>
+          <div class="field">
+            <label>Side Projects / Komunitas</label>
+            <input type="text" id="other_side" placeholder="Founder HR Indonesia Community (2.5K members), Mentor di Yayasan XYZ">
+          </div>
+          <div class="field">
+            <label>Professional References</label>
+            <input type="text" id="other_ref" placeholder="Available upon request / Nama — Jabatan di Perusahaan">
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SECTION 8: JOB DESCRIPTION ===== -->
+      <div class="sec" id="sec8">
+        <div class="sec-hdr" onclick="toggleSec('sec8')">
+          <div class="sec-left">
+            <div class="sec-num">8</div>
+            <div class="sec-info">
+              <div class="sec-label">Job Description <span style="color:#059669;font-size:10px;font-weight:700;background:#ECFDF5;padding:2px 7px;border-radius:10px;margin-left:6px">POWER UP</span></div>
+              <div class="sec-hint">CV akan otomatis disesuaikan dengan posisi ini</div>
+            </div>
+          </div>
+          <span class="sec-chevron">▾</span>
+        </div>
+        <div class="sec-body">
+          <div class="fhint">💡 <strong>Pro tip:</strong> Paste JD dari lowongan → AI akan menyelipkan keyword yang dicari recruiter ke seluruh bagian CV kamu secara otomatis. Ini yang membuat CV lolos ATS.</div>
+          <div class="field">
+            <label>Nama Perusahaan yang Dilamar</label>
+            <input type="text" id="target_company" placeholder="Google, Gojek, Unilever, Bank Mandiri">
+          </div>
+          <div class="field">
+            <label>Paste Job Description di Sini</label>
+            <textarea id="jd" style="min-height:120px" placeholder="Copy-paste seluruh job description dari lowongan yang kamu lamar...
+
+Contoh:
+We are looking for an experienced HR Business Partner to...
+Requirements:
+- 5+ years of HR experience
+- Experience with HRIS systems
+- Strong analytical and communication skills
+..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- GENERATE BTN -->
+      <button class="btn-gen" onclick="generate()">
+        <svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Generate Prompt + Preview CV
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ RIGHT: OUTPUT ============ -->
+<div id="right-col">
+  <div class="card" id="preview-card">
+    <div class="card-hdr">
+      <div class="card-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>
+      <div><div class="card-title">Preview CV 2026</div><div class="card-sub">Tampilan setelah diproses AI</div></div>
+    </div>
+    <div class="card-body">
+      <div id="placeholder" class="placeholder">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>
+        <p>Isi form di kiri lalu klik<br><strong>Generate</strong> untuk melihat preview CV<br>dan prompt siap pakai.</p>
+      </div>
+      <div id="cv-preview" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="card" id="prompt-card" style="display:none;margin-top:16px">
+    <div class="card-hdr">
+      <div class="card-ico"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <div><div class="card-title">Prompt Siap Pakai</div><div class="card-sub">Copy → Paste ke Claude / ChatGPT / Gemini → Tambahkan CV lama di bawahnya</div></div>
+    </div>
+    <div class="card-body">
+      <div class="prompt-hdr">
+        <div style="display:flex;align-items:center">
+          <div class="prompt-dots"><div class="prompt-dot"></div><div class="prompt-dot"></div><div class="prompt-dot"></div></div>
+          <span class="prompt-label">cv2026-prompt.txt</span>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt()">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copy-label">Copy Prompt</span>
+        </button>
+      </div>
+      <div class="prompt-text" id="prompt-text"></div>
+      <div class="action-bar">
+        <button class="abtn abtn-primary" onclick="copyPrompt()">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Prompt
+        </button>
+        <button class="abtn abtn-secondary" onclick="window.open('https://claude.ai','_blank')">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Buka Claude
+        </button>
+        <button class="abtn abtn-green" onclick="window.open('https://chatgpt.com','_blank')">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Buka ChatGPT
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Berhasil!</span>
+</div>
+
+<footer>CV 2026 Prompt Generator · Dibuat untuk membantu kamu tampil lebih baik di mata HR</footer>
+
+<script>
+let currentType = 'pro';
+let generatedPrompt = '';
+let expCount = 2;
+
+// ---- ACCORDION ----
+function toggleSec(id) {
+  const el = document.getElementById(id);
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
+
+// ---- TYPE ----
+function setType(type) {
+  currentType = type;
+  document.getElementById('btn-pro').classList.toggle('active', type==='pro');
+  document.getElementById('btn-fresh').classList.toggle('active', type==='fresh');
+  document.getElementById('exp-entries-pro').style.display = type==='pro'?'flex':'none';
+  document.getElementById('exp-entries-fresh').style.display = type==='fresh'?'flex':'none';
+  document.getElementById('posisi-saat-ini-wrap').style.display = type==='pro'?'block':'none';
+}
+
+// ---- TAGS ----
+function addTag(id, val) {
+  const el = document.getElementById(id);
+  const cur = el.value.trim();
+  el.value = cur ? cur + ', ' + val : val;
+}
+function addTagArea(id, val) {
+  const el = document.getElementById(id);
+  const cur = el.value.trim();
+  el.value = cur ? cur + '\n' + val : val;
+}
+
+// ---- PROGRESS ----
+function updateProgress() {
+  const required = ['nama','posisi','tahun','industri','pencapaian'];
+  const filled = required.filter(id => { const e=document.getElementById(id); return e&&e.value.trim(); }).length;
+  document.getElementById('progress').style.width = Math.round((filled/required.length)*100) + '%';
+}
+
+// ---- ADD/REMOVE EXP ----
+function addExpEntry() {
+  expCount++;
+  const isPro = currentType === 'pro';
+  const container = document.getElementById(isPro ? 'exp-entries-pro' : 'exp-entries-fresh');
+  const id = (isPro?'exp':'act') + expCount;
+  const num = container.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'exp-entry';
+  div.id = id;
+  div.innerHTML = `
+    <div class="exp-entry-hdr">
+      <span>${isPro?'Pengalaman Kerja':'Aktivitas / Pengalaman'} #${num}</span>
+      <button class="btn-remove" onclick="removeExp('${id}')" title="Hapus">×</button>
+    </div>
+    <div class="exp-entry-body">
+      <div class="row2">
+        <div class="field"><label>${isPro?'Jabatan / Posisi':'Peran / Jabatan'}</label><input type="text" class="exp-jabatan" placeholder="${isPro?'HR Analyst':'Anggota Divisi Riset'}"></div>
+        <div class="field"><label>${isPro?'Nama Perusahaan':'Nama Organisasi / Tempat'}</label><input type="text" class="exp-company" placeholder="${isPro?'PT ABC':'Himpunan Mahasiswa'}"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Periode</label><input type="text" class="exp-period" placeholder="${isPro?'2017 – 2019':'2022 – 2023'}"></div>
+        <div class="field"><label>${isPro?'Lokasi':'Tipe'}</label>${isPro?'<input type="text" class="exp-loc" placeholder="Jakarta">':'<select class="exp-loc"><option>Organisasi Kampus</option><option>Magang</option><option>Project Kampus</option><option>Kompetisi</option><option>Volunteer</option><option>Freelance</option></select>'}</div>
+      </div>
+      <div class="field"><label>${isPro?'Pencapaian & Dampak':'Kontribusi & Hasil'}</label><textarea class="exp-bullets" rows="3" placeholder="${isPro?'- Achieved X by doing Y, resulting in Z%':'- Contributed to X using Y skills, achieving Z result'}"></textarea></div>
+      <div class="field"><label>${isPro?'Tools yang Digunakan':'Skills / Tools yang Digunakan'}</label><input type="text" class="exp-tools" placeholder="${isPro?'Excel, SAP, dll':'Excel, komunikasi, dll'}"></div>
+    </div>`;
+  container.appendChild(div);
+}
+function removeExp(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// ---- HELPERS ----
+function v(id) { const e=document.getElementById(id); return e?e.value.trim():''; }
+function vl(id) { const e=document.getElementById(id); return e?Array.from(e.querySelectorAll('input[type=text],textarea,select')).map(i=>i.value.trim()).filter(Boolean):[] }
+
+function getExpBlocks(isPro) {
+  const container = document.getElementById(isPro?'exp-entries-pro':'exp-entries-fresh');
+  if (!container) return [];
+  return Array.from(container.querySelectorAll('.exp-entry')).map(entry => ({
+    jabatan: (entry.querySelector('.exp-jabatan')||{value:''}).value.trim(),
+    company: (entry.querySelector('.exp-company')||{value:''}).value.trim(),
+    period: (entry.querySelector('.exp-period')||{value:''}).value.trim(),
+    loc: (entry.querySelector('.exp-loc')||{value:''}).value.trim(),
+    bullets: (entry.querySelector('.exp-bullets')||{value:''}).value.trim(),
+    tools: (entry.querySelector('.exp-tools')||{value:''}).value.trim(),
+  })).filter(e => e.jabatan || e.company || e.bullets);
+}
+
+// ---- GENERATE ----
+function generate() {
+  const nama = v('nama')||'[Nama Kamu]';
+  const posisi = v('posisi')||'[Posisi yang Dilamar]';
+  const kota = v('kota')||'Jakarta';
+  const email = v('email')||'email@profesional.com';
+  const hp = v('hp')||'+62 812 xxxx xxxx';
+  const linkedin = v('linkedin');
+  const portfolio = v('portfolio');
+  const tahun = v('tahun');
+  const industri = v('industri');
+  const pencapaian = v('pencapaian');
+  const teamsize = v('team_size');
+  const profAkt = v('prof_aktivitas');
+  const hardSkills = v('hard_skills');
+  const toolsAll = v('tools_all');
+  const bahasa = v('bahasa');
+  const edu1deg = v('edu1_deg'); const edu1univ = v('edu1_univ'); const edu1year = v('edu1_year'); const edu1ipk = v('edu1_ipk');
+  const edu2deg = v('edu2_deg'); const edu2univ = v('edu2_univ'); const edu2year = v('edu2_year'); const edu2ipk = v('edu2_ipk');
+  const matkul = v('matkul');
+  const sertifPro = v('sertif_pro');
+  const sertifTools = v('sertif_tools');
+  const sertifLeader = v('sertif_leader');
+  const otherPortfolio = v('other_portfolio');
+  const otherPub = v('other_pub');
+  const otherSpeaker = v('other_speaker');
+  const otherAwards = v('other_awards');
+  const otherSide = v('other_side');
+  const otherRef = v('other_ref');
+  const targetCompany = v('target_company');
+  const jd = v('jd');
+  const isPro = currentType === 'pro';
+  const expBlocks = getExpBlocks(isPro);
+
+  // fresh grad only
+  const univ = v('univ'); const lulus = v('lulus'); const ipk = v('ipk');
+
+  // ---- BUILD PROMPT ----
+  let expSection = '';
+  if (expBlocks.length) {
+    expBlocks.forEach((e,i) => {
+      expSection += `\n  ${isPro?'Pengalaman':'Aktivitas'} ${i+1}:`;
+      if (e.jabatan) expSection += `\n  Jabatan/Peran : ${e.jabatan}`;
+      if (e.company) expSection += `\n  ${isPro?'Perusahaan':'Organisasi'} : ${e.company}`;
+      if (e.period) expSection += `\n  Periode       : ${e.period}`;
+      if (e.loc) expSection += `\n  ${isPro?'Lokasi':'Tipe'} : ${e.loc}`;
+      if (e.tools) expSection += `\n  Tools         : ${e.tools}`;
+      if (e.bullets) expSection += `\n  Pencapaian:\n${e.bullets.split('\n').map(l=>'    '+l).join('\n')}`;
+    });
+  }
+
+  let eduSection = '';
+  if (edu1deg||edu1univ) { eduSection += `\n  ${edu1deg||''}${edu1univ?' — '+edu1univ:''}${edu1year?' ('+edu1year+')':''}${edu1ipk?' · '+edu1ipk:''}`; }
+  if (edu2deg||edu2univ) { eduSection += `\n  ${edu2deg||''}${edu2univ?' — '+edu2univ:''}${edu2year?' ('+edu2year+')':''}${edu2ipk?' · '+edu2ipk:''}`; }
+  if (!isPro && univ) { eduSection += `\n  ${univ}${lulus?' — '+lulus:''}${ipk?' · IPK '+ipk:''}`; }
+  if (matkul) eduSection += `\n  Mata kuliah relevan: ${matkul}`;
+
+  let sertifSection = '';
+  if (sertifPro) sertifSection += `\n  Sertifikasi Profesional:\n${sertifPro.split('\n').map(l=>'    '+l).join('\n')}`;
+  if (sertifTools) sertifSection += `\n  Sertifikasi Tools:\n${sertifTools.split('\n').map(l=>'    '+l).join('\n')}`;
+  if (sertifLeader) sertifSection += `\n  Leadership/Lain: ${sertifLeader}`;
+
+  let otherSection = '';
+  if (otherPortfolio) otherSection += `\n  Portfolio:\n${otherPortfolio.split('\n').map(l=>'    '+l).join('\n')}`;
+  if (otherPub) otherSection += `\n  Publikasi: ${otherPub}`;
+  if (otherSpeaker) otherSection += `\n  Speaker: ${otherSpeaker}`;
+  if (otherAwards) otherSection += `\n  Awards: ${otherAwards}`;
+  if (otherSide) otherSection += `\n  Side Projects: ${otherSide}`;
+  if (otherRef) otherSection += `\n  References: ${otherRef}`;
+
+  generatedPrompt = `Bertindaklah sebagai Executive Recruiter, HR Director, ATS Specialist, dan Career Coach.
+
+Tugas kamu: Ubah data di bawah menjadi CV ${isPro?'profesional modern':'fresh graduate'} yang:
+✅ ATS-Friendly (lolos sistem screening otomatis)
+✅ Mudah discan HR dalam 10 detik
+✅ Fokus pada HASIL & IMPACT, bukan deskripsi tugas
+✅ Sesuai standar CV 2026${targetCompany?`\n✅ Disesuaikan untuk posisi di ${targetCompany}`:''}
+
+${'═'.repeat(52)}
+DATA KANDIDAT
+${'═'.repeat(52)}
+Nama          : ${nama}
+Target Posisi : ${posisi}
+Kota Domisili : ${kota}
+Email         : ${email}
+Nomor HP      : ${hp}${linkedin?`\nLinkedIn      : ${linkedin}`:''}${portfolio?`\nPortfolio     : ${portfolio}`:''}
+${isPro?`
+Total Pengalaman : ${tahun||'[isi tahun]'}
+Posisi Saat Ini  : ${v('posisi_skrg')||'[isi posisi sekarang]'}
+Industri         : ${industri||'[isi industri]'}
+Team Size        : ${teamsize||'[isi team size]'}
+Aktivitas Prof.  : ${profAkt||'[speaker/mentor/dll]'}
+`:`
+Universitas : ${univ||'[isi universitas & jurusan]'}
+Status      : ${lulus||'[isi tahun lulus]'}${ipk?`\nIPK         : ${ipk}`:''}
+Industri Minat : ${industri||'[isi bidang yang diminati]'}
+`}
+${'═'.repeat(52)}
+PENGALAMAN${isPro?'':' & AKTIVITAS'}
+${'═'.repeat(52)}
+${expSection||'[Masukkan pengalaman kerja kamu dari CV lama di bawah]'}
+${hardSkills||toolsAll?`
+${'═'.repeat(52)}
+SKILLS & TOOLS
+${'═'.repeat(52)}
+${hardSkills?`Hard Skills : ${hardSkills}`:''}
+${toolsAll?`Tools       : ${toolsAll}`:''}
+${bahasa?`Bahasa      : ${bahasa}`:''}`:''}`+
+(pencapaian?`
+${'═'.repeat(52)}
+PENCAPAIAN UTAMA (GUNAKAN SEBAGAI ACUAN ANGKA)
+${'═'.repeat(52)}
+${pencapaian}`:'')+(eduSection?`
+${'═'.repeat(52)}
+EDUCATION
+${'═'.repeat(52)}${eduSection}`:'')+(sertifSection?`
+${'═'.repeat(52)}
+CERTIFICATION & LEARNING
+${'═'.repeat(52)}${sertifSection}`:'')+(otherSection?`
+${'═'.repeat(52)}
+OTHER INFORMATION
+${'═'.repeat(52)}${otherSection}`:'')+`
+
+${'═'.repeat(52)}
+INSTRUKSI STRUKTUR CV YANG DIINGINKAN
+${'═'.repeat(52)}
+
+1. BIODATA (Header)
+   ✅ Tampilkan: Nama, Email profesional, No. HP, LinkedIn, Kota
+   ❌ HILANGKAN: Foto, umur, agama, status pernikahan, alamat lengkap
+
+2. PROFESSIONAL SUMMARY (3–5 kalimat)
+   WAJIB mencakup semua ini:
+   • Total pengalaman & industri yang pernah ditangani
+   ${isPro?'• Team size & wilayah yang pernah dikelola\n   • Tools & sertifikasi utama yang dikuasai':'• Jurusan & fokus bidang yang diminati\n   • Tools & skill utama yang dikuasai'}
+   • Pencapaian konkret dengan ANGKA (wajib ada angka)
+   • ${isPro?'Personal brand (speaker/mentor/coach jika ada)':'Project atau pengalaman paling relevan'}
+
+3. EXPERIENCE${isPro?'':' (dari semua aktivitas yang diberikan)'}
+   Format setiap entry:
+   [${isPro?'Jabatan':'Peran'}] | [${isPro?'Perusahaan':'Organisasi'}] | [Periode]
+   
+   Setiap bullet point WAJIB pakai formula:
+   HASIL + CARA (skill/tools yang digunakan) + DAMPAK BISNIS (angka)
+   
+   ✅ CONTOH BENAR:
+   "Reduced hiring turnaround time by 50% by implementing ATS 
+    and AI-screening tools, supporting 300+ employee onboarding 
+    across 9 countries."
+   
+   ❌ CONTOH SALAH:
+   "Responsible for recruitment and handling employee engagement."
+   
+   → Minimum 3 bullet per posisi
+   → Gunakan angka dari data pencapaian yang sudah diberikan
+   → Sebutkan tools yang digunakan di setiap konteks yang relevan
+
+4. EDUCATION
+   • Urutkan dari pendidikan terbaru
+   • Untuk profesional: cukup S1 ke atas
+   • Hilangkan SD, SMP, SMA dari CV
+
+5. CERTIFICATION & LEARNING
+   ✅ Tampilkan: sertifikasi profesional, tools, bootcamp relevan
+   ❌ Hilangkan: seminar biasa, sertifikat partisipasi tanpa kompetensi
+
+6. SKILLS
+   → Integrasikan ke dalam kalimat experience — BUKAN daftar terpisah
+   → Jika perlu section skills, tulis dalam konteks penggunaan nyata
+
+7. OTHER INFORMATION${otherSection?'':' (jika ada)'}
+   Prioritas: Portfolio → Awards → Speaker → Publikasi → References
+
+${'═'.repeat(52)}
+FORMAT & KETENTUAN TEKNIS
+${'═'.repeat(52)}
+• Panjang CV: 1–2 halaman MAKSIMAL
+• Gunakan bullet points, bukan paragraf panjang
+• Setiap bullet maksimal 2 baris
+• Angka dan persentase: gunakan format 30%, $50K, 9 countries
+• Bahasa: ${bahasa&&bahasa.toLowerCase().includes('english')?'English (professional)':'Bahasa Indonesia profesional atau English sesuai konteks'}
+• Format ATS-friendly: hindari tabel, kolom, grafik, dan shape
+
+${'═'.repeat(52)}
+REVIEW & EVALUASI (setelah CV selesai)
+${'═'.repeat(52)}
+Berikan:
+📊 ATS Score estimasi (0–100) dengan penjelasan per kategori
+💪 3 kekuatan utama CV ini
+⚡ 3 hal yang masih bisa diperkuat
+🔑 Keyword penting dari JD yang sudah / belum masuk ke CV${jd?`
+
+${'═'.repeat(52)}
+JOB DESCRIPTION TARGET${targetCompany?' — '+targetCompany:''}
+${'═'.repeat(52)}
+${jd}
+
+→ Sesuaikan SELURUH CV dengan JD di atas
+→ Keyword yang dicari recruiter harus muncul secara natural
+→ Cocokkan level dan tone dengan requirement posisi ini`:''}
+
+${'═'.repeat(52)}
+[PASTE CV LAMA KAMU DI BAWAH INI]
+${'═'.repeat(52)}
+
+[Masukkan isi CV lama kamu di sini — copy dari Word/PDF, atau tulis ulang jika belum punya CV]`;
+
+  // ---- BUILD PREVIEW ----
+  const toolsArr = (toolsAll||v('tools')||'').split(',').map(t=>t.trim()).filter(Boolean);
+  const sertifArr = (sertifPro||'').split('\n').map(s=>s.replace(/^[-•*]\s*/,'')).filter(Boolean).slice(0,4);
+  const pencArr = pencapaian ? pencapaian.split('\n').map(l=>l.replace(/^[-•*]\s*/,'')).filter(Boolean) : [];
+  const topExp = expBlocks[0];
+
+  let cvHtml = `<div class="cv-doc">
+    <div class="cv-name">${nama.toUpperCase()}</div>
+    <div class="cv-role">${posisi}</div>
+    <div class="cv-contacts">
+      <div class="cv-contact"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>${email}</div>
+      <div class="cv-contact"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 13.37 19a19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 4.12 4.18 2 2 0 0 1 6.1 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L10.09 9a16 16 0 0 0 6.29 6.29l.61-.61a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>${hp}</div>
+      ${linkedin?`<div class="cv-contact"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>${linkedin}</div>`:''}
+      <div class="cv-contact"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${kota}</div>
+    </div>
+
+    <div class="cv-sec-title">Professional Summary</div>
+    <div class="cv-summary-box">
+      ${tahun?`<strong>${tahun}</strong> pengalaman di `:'Berpengalaman di '}<strong>${industri||'berbagai industri'}</strong>.
+      ${teamsize?`Pernah mengelola <strong>${teamsize}</strong>. `:''}
+      ${toolsAll?`Menguasai <strong>${toolsAll.split(',').slice(0,3).join(', ')}</strong>. `:''}
+      ${pencArr.length?'Terbukti memberikan dampak bisnis yang terukur melalui inisiatif strategis.':'Berfokus pada hasil dan kontribusi yang nyata.'}
+      ${profAkt?`<br><em style="color:var(--blue);font-size:11px">${profAkt}</em>`:''}
+    </div>`;
+
+  if (expBlocks.length) {
+    cvHtml += `<div class="cv-sec-title">Experience</div>`;
+    expBlocks.slice(0,2).forEach((e,i) => {
+      const bullets = e.bullets ? e.bullets.split('\n').filter(l=>l.trim()).slice(0,3) : [];
+      cvHtml += `<div class="cv-exp-block">
+        <div class="cv-exp-hdr">
+          <span class="cv-exp-title">${e.jabatan||'Posisi'}</span>
+          <span class="cv-exp-period">${e.period||''}</span>
+        </div>
+        <div class="cv-exp-company">${e.company||''}${e.loc?' · '+e.loc:''}</div>
+        ${bullets.length?`<ul class="cv-bullets">${bullets.map(b=>`<li><strong>${b.replace(/^[-•*]\s*/,'').split(' ').slice(0,2).join(' ')}</strong> ${b.replace(/^[-•*]\s*/,'').split(' ').slice(2).join(' ')}</li>`).join('')}</ul>`:''}
+      </div>`;
+    });
+  } else {
+    cvHtml += `<div class="cv-sec-title">Experience</div>
+    <div style="color:var(--text-3);font-size:11px;font-style:italic;padding:8px 0">Isi section Experience di form untuk melihat preview...</div>`;
+  }
+
+  if (edu1deg||edu1univ||(!isPro&&univ)) {
+    cvHtml += `<div class="cv-sec-title">Education</div>`;
+    if (edu1deg||edu1univ) cvHtml += `<div class="cv-edu-item"><div class="cv-edu-deg">${edu1deg||''} ${edu1ipk?'· '+edu1ipk:''}</div><div class="cv-edu-school">${edu1univ||''}${edu1year?' · '+edu1year:''}</div></div>`;
+    if (edu2deg||edu2univ) cvHtml += `<div class="cv-edu-item"><div class="cv-edu-deg">${edu2deg||''}</div><div class="cv-edu-school">${edu2univ||''}${edu2year?' · '+edu2year:''}</div></div>`;
+    if (!isPro&&univ) cvHtml += `<div class="cv-edu-item"><div class="cv-edu-deg">${univ}</div><div class="cv-edu-school">${lulus||''}${ipk?' · IPK '+ipk:''}</div></div>`;
+  }
+
+  if (sertifArr.length) {
+    cvHtml += `<div class="cv-sec-title">Certification & Learning</div><div class="cv-tags">${sertifArr.map(s=>`<span class="cv-tag">${s}</span>`).join('')}</div>`;
+  }
+
+  if (toolsArr.length) {
+    cvHtml += `<div class="cv-sec-title">Skills & Tools</div><div class="cv-tags">${toolsArr.map(t=>`<span class="cv-tag">${t}</span>`).join('')}</div>`;
+  }
+
+  const hasOther = otherAwards||otherSpeaker||otherPub||otherPortfolio;
+  if (hasOther) {
+    cvHtml += `<div class="cv-sec-title">Other Information</div><ul class="cv-bullets">`;
+    if (otherAwards) cvHtml += `<li><strong>Awards:</strong> ${otherAwards}</li>`;
+    if (otherSpeaker) cvHtml += `<li><strong>Speaker:</strong> ${otherSpeaker}</li>`;
+    if (otherPub) cvHtml += `<li><strong>Publikasi:</strong> ${otherPub}</li>`;
+    if (otherPortfolio) cvHtml += `<li><strong>Portfolio:</strong> ${otherPortfolio.split('\n')[0].replace(/^[-•*]\s*/,'')}</li>`;
+    cvHtml += `</ul>`;
+  }
+
+  cvHtml += `</div>`;
+
+  // Show outputs
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('cv-preview').innerHTML = cvHtml;
+  document.getElementById('cv-preview').style.display = 'block';
+  document.getElementById('prompt-text').textContent = generatedPrompt;
+  document.getElementById('prompt-card').style.display = 'block';
+
+  if (window.innerWidth < 780) {
+    setTimeout(()=>document.getElementById('preview-card').scrollIntoView({behavior:'smooth'}),100);
+  }
+  showToast('Prompt & preview CV berhasil digenerate!');
+}
+
+function copyPrompt() {
+  if (!generatedPrompt) return;
+  navigator.clipboard.writeText(generatedPrompt).then(()=>{
+    document.getElementById('copy-label').textContent = 'Tersalin! ✓';
+    setTimeout(()=>document.getElementById('copy-label').textContent='Copy Prompt',2000);
+    showToast('Prompt berhasil di-copy! Paste ke Claude, ChatGPT, atau Gemini.');
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function resetAll() {
+  if (!confirm('Reset semua isian form?')) return;
+  document.querySelectorAll('input[type=text],textarea').forEach(el=>el.value='');
+  document.querySelectorAll('select').forEach(el=>el.selectedIndex=0);
+  document.getElementById('placeholder').style.display='flex';
+  document.getElementById('cv-preview').style.display='none';
+  document.getElementById('prompt-card').style.display='none';
+  document.getElementById('progress').style.width='0%';
+  generatedPrompt='';
+}
+</script>
+</body>
+</html>
