@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV 2026 Generator by @pangeran.ambia</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1B4FD8;--blue-dk:#1540B8;--blue-lt:#EBF0FF;--blue-md:#BFCFFF;
+  --text:#111827;--text-2:#6B7280;--text-3:#9CA3AF;
+  --border:#E5E7EB;--bg:#F3F4F8;--surface:#fff;--surface-2:#F9FAFB;
+  --green:#059669;--green-lt:#ECFDF5;--radius:10px;--radius-lg:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6}
+
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:30px;height:30px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:16px;height:16px;fill:#fff}
+.nav-title{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.nav-badge{font-size:10px;font-weight:600;padding:2px 8px;background:#F3F4F6;color:#374151;border-radius:20px;letter-spacing:.04em;border:1px solid var(--border)}
+.nav-pill{font-size:11px;padding:5px 12px;border-radius:20px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;font-family:inherit;transition:all .15s}
+.nav-pill:hover{border-color:var(--text);color:var(--text)}
+
+/* HERO */
+.hero{background:var(--surface);border-bottom:1px solid var(--border);padding:40px 24px 32px;text-align:center}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:#F3F4F6;color:#374151;font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:14px;letter-spacing:.04em;border:1px solid var(--border)}
+.hero h1{font-size:clamp(24px,4vw,38px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:10px}
+.hero h1 span{color:var(--blue)}
+.hero p{font-size:14px;color:var(--text-2);max-width:520px;margin:0 auto 20px;line-height:1.65}
+
+.sp-stat{display:flex;align-items:center;gap:20px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.sp-num{text-align:center}
+.sp-num-val{font-size:22px;font-weight:800;color:#111}
+.sp-num-label{font-size:11px;color:var(--text-2);margin-top:1px}
+.sp-div{width:1px;height:32px;background:var(--border)}
+
+.social-proof{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:20px;max-width:660px;margin-left:auto;margin-right:auto}
+.sp-badge{font-size:11px;padding:3px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:20px;color:var(--text-2);font-weight:500}
+
+.steps{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;max-width:560px;margin:0 auto}
+.step{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2);padding:4px 0}
+.step-dot{width:22px;height:22px;border-radius:50%;background:#111;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-arr{color:var(--border);font-size:16px;padding:0 8px}
+
+/* MAIN */
+.main{max-width:1160px;margin:0 auto;padding:28px 20px 80px;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media(max-width:780px){.main{grid-template-columns:1fr;padding:18px 14px 60px}}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.card-hdr{padding:16px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-ico{width:32px;height:32px;border-radius:8px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-ico svg{width:16px;height:16px;stroke:#374151;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card-title{font-size:14px;font-weight:700}
+.card-sub{font-size:11px;color:var(--text-2);margin-top:1px}
+.card-body{padding:20px}
+
+/* FORM */
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
+.fhint{font-size:11px;color:var(--text-2);margin-bottom:5px;line-height:1.5;padding:6px 9px;background:var(--surface-2);border-radius:6px;border-left:2px solid #D1D5DB}
+.fhint strong{color:#111}
+input[type=text],textarea,select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);transition:border-color .15s,box-shadow .15s;outline:none;resize:none;line-height:1.5}
+input[type=text]::placeholder,textarea::placeholder{color:var(--text-3)}
+input[type=text]:focus,textarea:focus{border-color:#111;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+textarea{min-height:120px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.row2{grid-template-columns:1fr}}
+
+.btn-gen{width:100%;padding:13px 20px;background:#111;color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px}
+.btn-gen:hover{background:#000}
+.btn-gen:active{transform:scale(.99)}
+.btn-gen svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* LOCKED PREVIEW */
+.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;text-align:center;padding:32px;color:var(--text-3)}
+.placeholder svg{width:44px;height:44px;stroke:var(--border);fill:none;stroke-width:1.5;margin-bottom:12px}
+.placeholder p{font-size:13px;line-height:1.65}
+
+.preview-wrapper{position:relative;border-radius:var(--radius);overflow:hidden;min-height:500px}
+.preview-blur{filter:blur(5px);user-select:none;pointer-events:none}
+
+/* WATERMARK */
+.watermark-overlay{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.wm-grid{position:absolute;inset:-80px;display:grid;grid-template-columns:repeat(3,1fr);transform:rotate(-28deg)}
+.wm-cell{display:flex;align-items:center;justify-content:center;padding:24px 0;font-size:13px;font-weight:800;color:rgba(0,0,0,0.12);letter-spacing:.03em;white-space:nowrap;text-transform:uppercase}
+
+/* LOCK GATE */
+.lock-gate{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.72);backdrop-filter:blur(3px);padding:24px;text-align:center}
+.lock-icon{width:48px;height:48px;background:#111;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.lock-icon svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.lock-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px}
+.lock-desc{font-size:12px;color:var(--text-2);line-height:1.65;margin-bottom:14px;max-width:280px}
+.lock-price{font-size:28px;font-weight:800;color:#111;margin-bottom:2px}
+.lock-price-sub{font-size:11px;color:var(--text-2);margin-bottom:16px}
+
+.payment-box{background:#F9FAFB;border:1.5px solid var(--border);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;text-align:left;width:100%;max-width:290px}
+.payment-box-title{font-size:10px;font-weight:700;color:#374151;margin-bottom:8px;text-transform:uppercase;letter-spacing:.07em}
+.payment-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.payment-row:last-child{margin-bottom:0}
+.payment-label{font-size:11px;color:var(--text-2)}
+.payment-val{font-size:12px;font-weight:700;color:var(--text)}
+.payment-copy{font-size:10px;background:#111;color:#fff;border:none;border-radius:5px;padding:3px 8px;cursor:pointer;font-family:inherit;font-weight:600}
+
+.code-wrap{width:100%;max-width:290px}
+.code-label{font-size:11px;color:var(--text-2);margin-bottom:6px;text-align:left;display:block}
+.code-row{display:flex;gap:8px}
+.code-input{flex:1;padding:10px 12px;border:2px solid var(--border);border-radius:var(--radius);font-size:15px;font-weight:700;letter-spacing:.12em;text-align:center;font-family:inherit;color:var(--text);outline:none;text-transform:uppercase}
+.code-input:focus{border-color:#111;box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+.code-input.error{border-color:#EF4444}
+.code-input.ok{border-color:var(--green)}
+.btn-unlock{padding:10px 16px;background:#111;color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-unlock:hover{background:#000}
+.code-err{font-size:11px;color:#EF4444;margin-top:6px;text-align:center;display:none}
+.code-hint{font-size:11px;color:var(--text-2);margin-top:8px;text-align:center}
+
+/* UNLOCKED */
+.unlock-banner{background:var(--green-lt);border:1.5px solid #A7F3D0;border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:8px;display:none}
+.unlock-banner svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2.5;stroke-linecap:round;flex-shrink:0}
+.unlock-banner span{font-size:12px;color:var(--green);font-weight:600}
+
+/* PROMPT BOX */
+.prompt-wrap{display:none;margin-top:16px}
+.prompt-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#1E293B;border-radius:var(--radius) var(--radius) 0 0}
+.prompt-dots{display:flex;gap:5px}
+.prompt-dot{width:10px;height:10px;border-radius:50%}
+.prompt-dot:nth-child(1){background:#FF5F57}
+.prompt-dot:nth-child(2){background:#FFBD2E}
+.prompt-dot:nth-child(3){background:#28C840}
+.prompt-meta{font-size:11px;color:#94A3B8;margin-left:8px}
+.copy-btn{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#CBD5E1;font-size:12px;font-weight:500;padding:5px 11px;border-radius:6px;cursor:pointer;font-family:inherit}
+.copy-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.copy-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.prompt-body{background:#0F172A;color:#E2E8F0;font-family:'SF Mono','Fira Code',monospace;font-size:11.5px;line-height:1.75;padding:16px;border-radius:0 0 var(--radius) var(--radius);white-space:pre-wrap;word-break:break-word;max-height:420px;overflow-y:auto}
+
+.action-bar{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.abtn{flex:1;min-width:110px;padding:9px 14px;border-radius:var(--radius);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.abtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.abtn-dark{background:#111;color:#fff;border:none}
+.abtn-dark:hover{background:#000}
+.abtn-outline{background:var(--surface);color:var(--text);border:1.5px solid var(--border)}
+.abtn-outline:hover{border-color:#111}
+.abtn-green{background:var(--green-lt);color:var(--green);border:1.5px solid #A7F3D0}
+
+/* ====== CV DOCUMENT STYLES (black & white pro) ====== */
+.cv-doc{background:#fff;font-family:'Georgia',serif;font-size:11px;line-height:1.6;color:#111;padding:4px}
+.cv-header{border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:12px}
+.cv-name{font-size:22px;font-weight:700;letter-spacing:-.02em;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111}
+.cv-role{font-size:12px;font-weight:600;color:#444;margin-top:2px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;text-transform:uppercase;letter-spacing:.06em}
+.cv-contacts{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;font-size:10.5px;color:#555;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.cv-contact-item{display:flex;align-items:center;gap:3px}
+.cv-sec{margin-bottom:12px}
+.cv-sec-title{font-size:9.5px;font-weight:700;letter-spacing:.12em;color:#111;text-transform:uppercase;border-bottom:1.5px solid #111;padding-bottom:3px;margin-bottom:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.cv-summary{font-size:11px;color:#333;line-height:1.7}
+.cv-exp-block{margin-bottom:10px}
+.cv-exp-block:last-child{margin-bottom:0}
+.cv-exp-top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px}
+.cv-exp-title{font-size:12px;font-weight:700;color:#111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.cv-exp-period{font-size:10px;color:#666;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;white-space:nowrap}
+.cv-exp-meta{font-size:10.5px;color:#555;font-style:italic;margin-bottom:4px}
+.cv-bullets{list-style:none;padding:0;margin:0}
+.cv-bullets li{font-size:10.5px;color:#333;padding:2px 0 2px 14px;position:relative;line-height:1.55}
+.cv-bullets li::before{content:'•';position:absolute;left:2px;color:#111;font-size:11px}
+.cv-edu-item{margin-bottom:4px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.cv-edu-deg{font-size:11px;font-weight:600;color:#111}
+.cv-edu-meta{font-size:10px;color:#666}
+.cv-cert-item{font-size:10.5px;color:#333;padding:2px 0 2px 14px;position:relative}
+.cv-cert-item::before{content:'•';position:absolute;left:2px;color:#111}
+.cv-award-item{font-size:10.5px;color:#333;padding:2px 0 2px 14px;position:relative}
+.cv-award-item::before{content:'•';position:absolute;left:2px;color:#111}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#111;color:#fff;padding:11px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:all .25s ease;z-index:9999;display:flex;align-items:center;gap:8px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast svg{width:15px;height:15px;stroke:#4ADE80;fill:none;stroke-width:2.5;stroke-linecap:round}
+
+footer{text-align:center;padding:18px;font-size:11px;color:var(--text-3);border-top:1px solid var(--border)}
+footer strong{color:#111}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    <span class="nav-title">CV 2026 Generator</span>
+    <span class="nav-badge">by @pangeran.ambia</span>
+  </div>
+  <button class="nav-pill" onclick="resetAll()">Reset</button>
+</nav>
+
+<div class="hero">
+  <div class="hero-pill">⚡ Paste CV lama → Dapat prompt AI-ready dalam 30 detik</div>
+  <h1>CV biasa jadi<br><span>CV yang dilirik HR</span></h1>
+
+  <div class="sp-stat">
+    <div class="sp-num"><div class="sp-num-val">1000+</div><div class="sp-num-label">profesional dibantu</div></div>
+    <div class="sp-div"></div>
+    <div class="sp-num"><div class="sp-num-val">Rp49K</div><div class="sp-num-label">seharga kopi ☕</div></div>
+    <div class="sp-div"></div>
+    <div class="sp-num"><div class="sp-num-val">10 det</div><div class="sp-num-label">HR scan CV kamu</div></div>
+  </div>
+
+  <div class="social-proof">
+    <span class="sp-badge">Astra</span><span class="sp-badge">BCA</span><span class="sp-badge">BNI</span>
+    <span class="sp-badge">Mandiri</span><span class="sp-badge">Danamon</span><span class="sp-badge">Unilever</span>
+    <span class="sp-badge">P&G</span><span class="sp-badge">Indofood</span><span class="sp-badge">KANMO</span>
+    <span class="sp-badge">PwC</span><span class="sp-badge">Deloitte</span><span class="sp-badge">Dentsu</span>
+    <span class="sp-badge">Biofarma</span><span class="sp-badge">Pelindo</span><span class="sp-badge">RS Mitra Keluarga</span>
+    <span class="sp-badge">& more</span>
+  </div>
+
+  <div class="steps">
+    <div class="step"><div class="step-dot">1</div>Paste CV lama</div>
+    <div class="step-arr">→</div>
+    <div class="step"><div class="step-dot">2</div>Isi posisi target</div>
+    <div class="step-arr">→</div>
+    <div class="step"><div class="step-dot">3</div>Bayar Rp49K</div>
+    <div class="step-arr">→</div>
+    <div class="step"><div class="step-dot">4</div>Dapat prompt</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- LEFT: FORM -->
+<div>
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-ico"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <div><div class="card-title">Isi 3 field ini</div><div class="card-sub">Gak perlu isi panjang-panjang — paste CV lama kamu</div></div>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <label>Posisi yang Dilamar *</label>
+        <div class="fhint">Tulis spesifik — ini yang jadi fokus seluruh CV kamu</div>
+        <input type="text" id="posisi" placeholder="Contoh: HR Business Partner, Head of HR, Marketing Manager">
+      </div>
+
+      <div class="field">
+        <label>Paste CV Lama Kamu di Sini *</label>
+        <div class="fhint"><strong>Copy seluruh isi CV</strong> dari Word/PDF dan paste di sini. Semakin lengkap, semakin bagus hasilnya. AI akan otomatis merapikan struktur, bahasa, dan impact-nya.</div>
+        <textarea id="cv_lama" style="min-height:220px" placeholder="Nama: ...
+Email: ...
+Pengalaman: ...
+Pendidikan: ...
+Skills: ...
+
+(Paste CV lengkap kamu di sini)"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Job Description Target <span style="font-weight:400;color:var(--text-3)">(opsional tapi sangat direkomendasikan)</span></label>
+        <div class="fhint">Paste JD dari lowongan → keyword recruiter otomatis masuk ke CV kamu → ATS score naik drastis</div>
+        <textarea id="jd" style="min-height:100px" placeholder="Paste job description dari lowongan yang kamu lamar..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Info Tambahan <span style="font-weight:400;color:var(--text-3)">(opsional)</span></label>
+        <div class="fhint">Ada pencapaian, sertifikasi, atau info yang belum ada di CV lama? Tambahkan di sini.</div>
+        <textarea id="tambahan" style="min-height:70px" placeholder="Contoh: Baru dapat sertifikasi CPHRM bulan lalu. Punya pengalaman manage tim 50 orang di project X. Speaker di webinar HR bulan kemarin."></textarea>
+      </div>
+
+      <button class="btn-gen" onclick="generate()">
+        <svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Generate Prompt & Preview CV
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT: OUTPUT -->
+<div>
+  <div class="card" id="preview-card">
+    <div class="card-hdr">
+      <div class="card-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>
+      <div><div class="card-title">Preview CV 2026</div><div class="card-sub">Professional · ATS-Friendly · Impact-Driven</div></div>
+    </div>
+    <div class="card-body">
+
+      <div id="placeholder" class="placeholder">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>
+        <p>Paste CV lama di kiri<br>lalu klik <strong>Generate</strong></p>
+      </div>
+
+      <!-- LOCKED -->
+      <div id="locked-out" style="display:none">
+        <div class="preview-wrapper">
+          <div class="preview-blur" id="cv-blur"></div>
+          <div class="watermark-overlay"><div class="wm-grid" id="wm-grid"></div></div>
+          <div class="lock-gate" id="lock-gate">
+            <div class="lock-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <div class="lock-title">Prompt Dikunci 🔐</div>
+            <div class="lock-desc">Preview sudah siap! Transfer Rp49.000 → DM bukti ke <strong>@pangeran.ambia</strong> → dapat kode akses prompt lengkap.</div>
+            <div class="lock-price">Rp 49.000</div>
+            <div class="lock-price-sub">Seharga kopi — tapi hasilnya beda kelas ☕</div>
+            <div class="payment-box">
+              <div class="payment-box-title">Transfer ke</div>
+              <div class="payment-row"><span class="payment-label">Bank</span><span class="payment-val">BCA</span></div>
+              <div class="payment-row"><span class="payment-label">Rekening</span><span class="payment-val">4971243206</span><button class="payment-copy" onclick="copyRek()">Copy</button></div>
+              <div class="payment-row"><span class="payment-label">A/N</span><span class="payment-val">Pangeran Ambia F.</span></div>
+              <div class="payment-row"><span class="payment-label">Nominal</span><span class="payment-val">Rp 49.000</span></div>
+            </div>
+            <div class="code-wrap">
+              <span class="code-label">Masukkan kode akses dari @pangeran.ambia:</span>
+              <div class="code-row">
+                <input class="code-input" id="code-in" type="text" placeholder="KODE" maxlength="8" oninput="this.value=this.value.toUpperCase()">
+                <button class="btn-unlock" onclick="unlockPrompt()">Buka</button>
+              </div>
+              <div class="code-err" id="code-err">Kode salah. Hubungi @pangeran.ambia di Instagram.</div>
+              <div class="code-hint">Kode dikirim via DM Instagram setelah transfer dikonfirmasi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNLOCKED -->
+      <div id="unlocked-out" style="display:none">
+        <div class="unlock-banner" id="unlock-banner">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Kode valid! Prompt sudah terbuka 🎉</span>
+        </div>
+        <div id="cv-unlocked"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PROMPT -->
+  <div class="card prompt-wrap" id="prompt-wrap" style="margin-top:16px">
+    <div class="card-hdr">
+      <div class="card-ico"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <div><div class="card-title">Prompt Siap Pakai ✅</div><div class="card-sub">Copy → Paste ke Claude / ChatGPT / Gemini</div></div>
+    </div>
+    <div class="card-body">
+      <div class="prompt-hdr">
+        <div style="display:flex;align-items:center">
+          <div class="prompt-dots"><div class="prompt-dot"></div><div class="prompt-dot"></div><div class="prompt-dot"></div></div>
+          <span class="prompt-meta">cv2026-prompt.txt · @pangeran.ambia</span>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt()">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <span id="copy-lbl">Copy Prompt</span>
+        </button>
+      </div>
+      <div class="prompt-body" id="prompt-body"></div>
+      <div class="action-bar">
+        <button class="abtn abtn-dark" onclick="copyPrompt()">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy Prompt
+        </button>
+        <button class="abtn abtn-outline" onclick="window.open('https://claude.ai','_blank')">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Claude
+        </button>
+        <button class="abtn abtn-outline" onclick="window.open('https://chatgpt.com','_blank')">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>ChatGPT
+        </button>
+        <button class="abtn abtn-green" onclick="window.open('https://gemini.google.com','_blank')">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Gemini
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<footer>CV 2026 Generator · by <strong>@pangeran.ambia</strong> · 1000+ professionals helped from Astra, BCA, Unilever, P&G, PwC, Deloitte & more</footer>
+
+<script>
+// ── KODE AKSES (edit sesuai yang kamu kasih ke pembeli) ──
+const VALID = new Set([
+  'AMBIA01','AMBIA02','AMBIA03','AMBIA04','AMBIA05',
+  'AMBIA06','AMBIA07','AMBIA08','AMBIA09','AMBIA10',
+  'CV2026A','CV2026B','CV2026C','CV2026D','CV2026E',
+  'PRO2026','HR2026A','HR2026B','HR2026C','HR2026D',
+  'UNLOCK1','UNLOCK2','UNLOCK3','UNLOCK4','UNLOCK5',
+]);
+
+let prompt = '';
+let unlocked = false;
+
+// Watermark grid
+(function(){
+  const g = document.getElementById('wm-grid');
+  for(let i=0;i<27;i++){
+    const c = document.createElement('div');
+    c.className='wm-cell';
+    c.textContent='@pangeran.ambia';
+    g.appendChild(c);
+  }
+})();
+
+function v(id){const e=document.getElementById(id);return e?e.value.trim():'';}
+
+function generate(){
+  const posisi = v('posisi');
+  const cvLama = v('cv_lama');
+  const jd = v('jd');
+  const tambahan = v('tambahan');
+
+  if(!cvLama){
+    showToast('Paste CV lama kamu dulu ya!');
+    document.getElementById('cv_lama').focus();
+    return;
+  }
+  if(!posisi){
+    showToast('Isi posisi yang dilamar dulu!');
+    document.getElementById('posisi').focus();
+    return;
+  }
+
+  // BUILD PROMPT
+  const E = '═'.repeat(56);
+  prompt = `You are an Executive Recruiter, HR Director, ATS Specialist, and Career Coach with 20+ years of experience.
+
+Your task: Transform the CV below into a modern, professional CV that is:
+✅ ATS-Friendly — passes automated screening systems
+✅ Scannable in 10 seconds by any HR professional
+✅ 100% focused on RESULTS & IMPACT, not job descriptions
+✅ Written in professional English
+✅ Maximum 2 pages
+${posisi ? `✅ Tailored specifically for: ${posisi}` : ''}
+
+${E}
+TARGET POSITION
+${E}
+${posisi || '[Position not specified]'}
+
+${E}
+CV STRUCTURE REQUIRED (follow exactly)
+${E}
+
+1. HEADER / BIODATA
+   ✅ Include: Full name, professional email, phone, LinkedIn, city
+   ❌ REMOVE: Photo, age, religion, marital status, full address, nationality
+
+2. PROFESSIONAL SUMMARY (3–5 sentences)
+   Must include ALL of these:
+   • Total years of experience + industries covered
+   • Team size & geographic scope managed
+   • Key tools & certifications
+   • Concrete achievements with NUMBERS
+   • Professional activities (speaker/mentor/coach/content creator if any)
+
+3. PROFESSIONAL EXPERIENCE
+   Format per role:
+   [Job Title] | [Company Name] | [Location] | [Period]
+   
+   Each bullet MUST follow this formula:
+   RESULT + HOW (skill/tool used) + BUSINESS IMPACT (number/%)
+   
+   ✅ RIGHT: "Reduced hiring cost by 20% by implementing AI-enabled screening 
+    workflows using ChatGPT, Claude, ATS, and CRM tools."
+   ❌ WRONG: "Responsible for recruitment and employee engagement activities."
+   
+   Rules:
+   → Minimum 4–5 bullets per role (explain fully, do NOT compress)
+   → Every role MUST have its location
+   → Use numbers in every bullet where possible
+   → Mention specific tools used in context
+   → Earlier roles: explain fully — do NOT compress into 1–2 lines
+   → Other Professional Experience: treat same as main experience with full bullets
+
+4. EDUCATION
+   • Latest first
+   • Professional only (no elementary/middle/high school)
+
+5. CERTIFICATION & LEARNING
+   • List each certification on a separate line
+   • Format: [Certification Name] | [Issuer] | [Year if available]
+   • Do NOT compress into one line
+
+6. PORTFOLIO, AWARDS & RECOGNITION
+   • List each item separately with bullet points
+
+${E}
+CRITICAL RULES
+${E}
+• NO "Core Strengths" section — integrate skills into experience bullets
+• NO generic skill lists — show skills through achievements
+• Every role must show LOCATION
+• Earlier/grouped roles: expand fully, never compress
+• Other experience (speaker/mentor/creator): full bullet points like main experience
+• Certifications: one per line, never compressed
+• Language: Professional English throughout
+• Design: Clean black & white, no colors, ATS-safe
+
+${E}
+AFTER THE CV — PROVIDE:
+${E}
+📊 ATS Score estimate (0–100) with breakdown by category
+💪 3 strongest points of this CV
+⚡ 3 areas that can still be improved
+🔑 Keywords from the JD that are present / missing${jd ? `
+
+${E}
+JOB DESCRIPTION TO TARGET
+${E}
+${jd}
+
+→ Align the ENTIRE CV to this JD
+→ Weave in recruiter keywords naturally throughout every section
+→ Match seniority level and tone to the role requirements` : ''}${tambahan ? `
+
+${E}
+ADDITIONAL INFORMATION TO INCORPORATE
+${E}
+${tambahan}` : ''}
+
+${E}
+ORIGINAL CV (transform this)
+${E}
+
+${cvLama}
+
+─────────────────────────────────────────────────────────
+Prompt generated by CV 2026 Generator · @pangeran.ambia
+─────────────────────────────────────────────────────────`;
+
+  // BUILD CV PREVIEW (sample structure based on input)
+  const lines = cvLama.split('\n').filter(l=>l.trim());
+  const firstLine = lines[0] || 'YOUR NAME';
+  // Try to detect name (first non-empty line or after "Nama:")
+  let name = firstLine.replace(/^(nama\s*:|name\s*:)/i,'').trim();
+  if(name.length > 40) name = name.substring(0,40);
+
+  const cvHtml = `<div class="cv-doc">
+    <div class="cv-header">
+      <div class="cv-name">${name.toUpperCase()}</div>
+      <div class="cv-role">${posisi}</div>
+      <div class="cv-contacts">
+        <span class="cv-contact-item">✉ [email]</span>
+        <span class="cv-contact-item">✆ [phone]</span>
+        <span class="cv-contact-item">in [linkedin]</span>
+        <span class="cv-contact-item">📍 [city]</span>
+      </div>
+    </div>
+
+    <div class="cv-sec">
+      <div class="cv-sec-title">Professional Summary</div>
+      <div class="cv-summary">Strategic professional with proven track record in <em>${posisi}</em>. Demonstrated ability to deliver measurable business impact through data-driven decisions, cross-functional leadership, and modern tools including AI-powered workflows. Consistent results across multiple industries with quantifiable achievements in productivity, efficiency, and team performance.</div>
+    </div>
+
+    <div class="cv-sec">
+      <div class="cv-sec-title">Professional Experience</div>
+      <div class="cv-exp-block">
+        <div class="cv-exp-top"><span class="cv-exp-title">[Most Recent Role] | [Company] | [Location]</span><span class="cv-exp-period">[Period] – Present</span></div>
+        <ul class="cv-bullets">
+          <li>Delivered [X]% improvement in [metric] by implementing [approach] using [tools], resulting in [business impact].</li>
+          <li>Led [initiative] across [scope] by [method], achieving [measurable outcome] within [timeframe].</li>
+          <li>Reduced [problem] by [X]% through [strategy], directly contributing to [business goal].</li>
+          <li>Built [system/framework] that enabled [team/organization] to [capability], improving [KPI] by [X]%.</li>
+        </ul>
+      </div>
+      <div class="cv-exp-block" style="margin-top:10px">
+        <div class="cv-exp-top"><span class="cv-exp-title">[Previous Role] | [Company] | [Location]</span><span class="cv-exp-period">[Start] – [End]</span></div>
+        <ul class="cv-bullets">
+          <li>Achieved [result] by executing [action] using [tools/skills], impacting [business area] by [X]%.</li>
+          <li>Managed [scope] of [size] by [approach], delivering [outcome] within [timeframe].</li>
+          <li>Designed and implemented [initiative] that [impact], resulting in [measurable improvement].</li>
+        </ul>
+      </div>
+      <div class="cv-exp-block" style="margin-top:6px;padding-top:6px;border-top:1px dashed #DDD">
+        <div style="font-size:10px;color:#888;font-style:italic;margin-bottom:6px;font-family:-apple-system,sans-serif">Earlier roles will be fully expanded by AI — not compressed</div>
+        <div class="cv-exp-top"><span class="cv-exp-title">[Earlier Role] | [Company] | [Location]</span><span class="cv-exp-period">[Period]</span></div>
+        <ul class="cv-bullets">
+          <li>All earlier experience will be written in full — each role gets its own dedicated bullet points explaining scope, tools, and impact.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cv-sec">
+      <div class="cv-sec-title">Education</div>
+      <div class="cv-edu-item"><div class="cv-edu-deg">[Degree] | [University]</div><div class="cv-edu-meta">[Year] · GPA: [if ≥ 3.2]</div></div>
+    </div>
+
+    <div class="cv-sec">
+      <div class="cv-sec-title">Certification & Learning</div>
+      <div class="cv-cert-item">[Certification Name 1] | [Issuer] | [Year]</div>
+      <div class="cv-cert-item">[Certification Name 2] | [Issuer] | [Year]</div>
+      <div class="cv-cert-item">[Certification Name 3] | [Issuer] | [Year]</div>
+      <div class="cv-cert-item">[Each certification on its own line]</div>
+    </div>
+
+    <div class="cv-sec">
+      <div class="cv-sec-title">Portfolio, Awards & Recognition</div>
+      <div class="cv-award-item">[Portfolio item or project]</div>
+      <div class="cv-award-item">[Award or recognition with year]</div>
+      <div class="cv-award-item">[Speaker activity or publication]</div>
+    </div>
+  </div>`;
+
+  // Inject into blur (locked) and unlocked divs
+  document.getElementById('cv-blur').innerHTML = cvHtml;
+  document.getElementById('cv-unlocked').innerHTML = cvHtml;
+  document.getElementById('prompt-body').textContent = prompt;
+
+  // Show locked state
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('locked-out').style.display = 'block';
+  document.getElementById('unlocked-out').style.display = 'none';
+  document.getElementById('prompt-wrap').style.display = 'none';
+  document.getElementById('lock-gate').style.display = 'flex';
+  document.getElementById('code-in').value = '';
+  document.getElementById('code-err').style.display = 'none';
+  document.getElementById('code-in').classList.remove('error','ok');
+  document.getElementById('unlock-banner').style.display = 'none';
+  unlocked = false;
+
+  if(window.innerWidth < 780){
+    setTimeout(()=>document.getElementById('preview-card').scrollIntoView({behavior:'smooth'}),100);
+  }
+  showToast('Preview siap! Transfer Rp49K → DM @pangeran.ambia → dapat kode.');
+}
+
+function unlockPrompt(){
+  const code = document.getElementById('code-in').value.trim().toUpperCase();
+  const inp = document.getElementById('code-in');
+  const err = document.getElementById('code-err');
+  if(!code){inp.classList.add('error');err.textContent='Masukkan kode akses dulu.';err.style.display='block';return;}
+
+  if(VALID.has(code)){
+    inp.classList.remove('error');inp.classList.add('ok');err.style.display='none';
+    unlocked = true;
+    setTimeout(()=>{
+      document.getElementById('locked-out').style.display='none';
+      document.getElementById('unlocked-out').style.display='block';
+      document.getElementById('unlock-banner').style.display='flex';
+      document.getElementById('prompt-wrap').style.display='block';
+      showToast('🎉 Kode valid! Prompt terbuka. Copy dan paste ke AI.');
+      setTimeout(()=>document.getElementById('prompt-wrap').scrollIntoView({behavior:'smooth'}),200);
+    },300);
+  } else {
+    inp.classList.add('error');inp.classList.remove('ok');
+    err.textContent='Kode salah atau tidak valid. Hubungi @pangeran.ambia di Instagram.';
+    err.style.display='block';
+    inp.style.transform='translateX(-5px)';
+    setTimeout(()=>inp.style.transform='translateX(5px)',80);
+    setTimeout(()=>inp.style.transform='translateX(0)',160);
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('code-in').addEventListener('keydown',e=>{if(e.key==='Enter')unlockPrompt();});
+});
+
+function copyRek(){
+  navigator.clipboard.writeText('4971243206').then(()=>showToast('No. rekening berhasil di-copy!'));
+}
+
+function copyPrompt(){
+  if(!prompt||!unlocked){showToast('Masukkan kode akses dulu!');return;}
+  navigator.clipboard.writeText(prompt).then(()=>{
+    document.getElementById('copy-lbl').textContent='Tersalin ✓';
+    setTimeout(()=>document.getElementById('copy-lbl').textContent='Copy Prompt',2500);
+    showToast('Prompt di-copy! Paste ke Claude, ChatGPT, atau Gemini.');
+  });
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function resetAll(){
+  document.querySelectorAll('input,textarea').forEach(e=>e.value='');
+  document.getElementById('placeholder').style.display='flex';
+  document.getElementById('locked-out').style.display='none';
+  document.getElementById('unlocked-out').style.display='none';
+  document.getElementById('prompt-wrap').style.display='none';
+  prompt='';unlocked=false;
+}
+</script>
+</body>
+</html>
