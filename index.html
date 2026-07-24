@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Slip Gaji — Layak UMR, Di Atas UMR, atau Potensi 2 Digit?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2EFE6;
+    --paper-2:#E8E3D5;
+    --ink:#211F1A;
+    --ink-soft:#5B5748;
+    --stamp-red:#A23B33;
+    --stamp-green:#3D6B4F;
+    --line:#C9C2AC;
+    --amber:#B98A2E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ink);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:40px 16px 80px;
+  }
+  .desk-label{
+    position:fixed;
+    top:18px; left:50%; transform:translateX(-50%);
+    color:#8A8574;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    z-index:5;
+    text-align:center;
+    padding:0 20px;
+  }
+  .receipt{
+    position:relative;
+    width:100%;
+    max-width:470px;
+    background:var(--paper);
+    box-shadow:0 30px 60px rgba(0,0,0,0.45);
+    padding:38px 32px 44px;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,0.025) 28px);
+  }
+  .receipt::before, .receipt::after{
+    content:"";
+    position:absolute; left:0; right:0; height:14px;
+    background:
+      radial-gradient(circle at 8px 7px, var(--ink) 7px, transparent 7.5px) repeat-x;
+    background-size:20px 14px;
+  }
+  .receipt::before{ top:-7px; }
+  .receipt::after{ bottom:-7px; transform:rotate(180deg); }
+
+  .brand{
+    text-align:center;
+    margin-bottom:18px;
+    padding-bottom:18px;
+    border-bottom:2px dashed var(--line);
+  }
+  .brand .mark{
+    font-family:'Archivo Black', sans-serif;
+    font-size:22px;
+    letter-spacing:0.02em;
+    line-height:1.15;
+  }
+  .brand .sub{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.08em;
+    margin-top:6px;
+    text-transform:uppercase;
+  }
+  .meta-row{
+    display:flex; justify-content:space-between;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-bottom:20px;
+  }
+
+  .screen{ display:none; }
+  .screen.active{ display:block; animation:fadeIn .35s ease; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .intro p{ font-size:15px; line-height:1.6; color:var(--ink); margin:0 0 14px; }
+  .intro .pillars{ list-style:none; padding:0; margin:20px 0; font-family:'JetBrains Mono', monospace; font-size:12.5px; }
+  .intro .pillars li{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dotted var(--line); }
+  .intro .pillars li span:last-child{ color:var(--ink-soft); text-align:right; padding-left:12px;}
+  .honesty-note{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    background:var(--paper-2);
+    padding:12px 14px;
+    line-height:1.6;
+    margin:16px 0;
+    border-left:3px solid var(--ink);
+  }
+
+  button.primary{
+    width:100%;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:16px 18px;
+    cursor:pointer;
+    margin-top:8px;
+    transition:transform .15s ease, background .15s ease;
+  }
+  button.primary:hover{ background:#3a362c; }
+  button.primary:active{ transform:scale(0.98); }
+
+  button.ghost{
+    width:100%;
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:14px 18px;
+    cursor:pointer;
+    margin-top:10px;
+  }
+  button.ghost:hover{ background:rgba(0,0,0,0.04); }
+
+  .mode-pick{ display:flex; flex-direction:column; gap:12px; margin:22px 0; }
+  .mode-card{
+    text-align:left;
+    background:var(--paper);
+    border:1.5px solid var(--ink);
+    padding:16px;
+    cursor:pointer;
+    transition:background .12s ease;
+  }
+  .mode-card:hover{ background:var(--paper-2); }
+  .mode-card .mc-title{ font-family:'Archivo Black', sans-serif; font-size:15px; margin-bottom:4px; }
+  .mode-card .mc-desc{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+
+  .progress-line{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    display:flex; justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .progress-track{ height:4px; width:100%; background:var(--paper-2); margin-bottom:26px; position:relative; overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--ink); width:0%; transition:width .3s ease; }
+  .category-tag{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--paper);
+    background:var(--ink);
+    padding:3px 9px;
+    margin-bottom:14px;
+  }
+  .question-text{ font-size:16.5px; line-height:1.5; margin:0 0 20px; }
+  .scale{ display:flex; flex-direction:column; gap:8px; }
+  .scale button{
+    text-align:left;
+    background:var(--paper);
+    border:1.5px solid var(--ink);
+    padding:13px 14px;
+    font-family:'Inter', sans-serif;
+    font-size:13px;
+    line-height:1.4;
+    cursor:pointer;
+    display:flex; align-items:flex-start; gap:10px;
+    transition:background .12s ease;
+  }
+  .scale button:hover{ background:var(--paper-2); }
+  .scale button .letter{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:12px;
+    color:var(--ink-soft);
+    flex-shrink:0;
+  }
+  .nav-back{
+    margin-top:18px; background:none; border:none;
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--ink-soft);
+    text-decoration:underline; cursor:pointer; padding:0;
+  }
+
+  .stamp{
+    position:absolute; right:26px; top:100px;
+    font-family:'Archivo Black', sans-serif;
+    font-size:14px; letter-spacing:0.02em; text-transform:uppercase;
+    border:3px solid var(--stamp-color, var(--stamp-green));
+    color:var(--stamp-color, var(--stamp-green));
+    padding:6px 10px; transform:rotate(-9deg); opacity:0.9;
+    line-height:1.2; text-align:center;
+  }
+  .verdict-title{ font-family:'Archivo Black', sans-serif; font-size:23px; line-height:1.2; margin:6px 0 10px; max-width:76%; }
+  .verdict-desc{ font-size:14.5px; line-height:1.6; color:var(--ink); margin-bottom:22px; }
+  .breakdown{ margin:20px 0; }
+  .breakdown-row{ margin-bottom:14px; }
+  .breakdown-label{ display:flex; justify-content:space-between; font-family:'JetBrains Mono', monospace; font-size:11.5px; margin-bottom:5px; }
+  .bar-track{ height:10px; background:var(--paper-2); position:relative; }
+  .bar-fill{ height:100%; background:var(--ink); }
+  .divider-dash{ border:none; border-top:2px dashed var(--line); margin:22px 0; }
+  .advice-block{
+    font-family:'JetBrains Mono', monospace; font-size:12px; line-height:1.7; color:var(--ink);
+    background:var(--paper-2); padding:14px 16px; margin-bottom:20px;
+  }
+  .advice-block b{ display:block; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.05em; font-size:11px;}
+
+  .cta-block{
+    background:var(--ink); color:var(--paper);
+    padding:18px 16px; margin-bottom:20px;
+  }
+  .cta-block .cta-eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:#C9C2AC; margin-bottom:8px;
+  }
+  .cta-block .cta-text{ font-size:14px; line-height:1.6; margin-bottom:14px; }
+  .cta-block a.follow-btn{
+    display:block; text-align:center; text-decoration:none;
+    background:var(--paper); color:var(--ink);
+    font-family:'JetBrains Mono', monospace; font-weight:700; font-size:13px;
+    letter-spacing:0.05em; text-transform:uppercase;
+    padding:13px; margin-bottom:0;
+  }
+
+  .bio-block{
+    border:1.5px dashed var(--line);
+    padding:16px; margin-bottom:20px;
+  }
+  .bio-block .bio-eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;
+  }
+  .bio-block .bio-text{ font-size:13px; line-height:1.65; color:var(--ink); }
+  .bio-block .bio-stats{
+    display:flex; gap:16px; margin-top:12px;
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--ink-soft);
+  }
+  .bio-block .bio-stats b{ display:block; color:var(--ink); font-size:15px; font-family:'Archivo Black', sans-serif; }
+  .bio-linkedin-link{
+    display:inline-block; margin-top:14px;
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; font-weight:700;
+    color:var(--ink); text-decoration:underline;
+  }
+  .bio-linkedin-link:hover{ color:var(--ink-soft); }
+
+  .footer-note{ text-align:center; font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-soft); margin-top:22px; }
+</style>
+</head>
+<body>
+
+<div class="desk-label">— cek slip gaji lo, sebelum orang lain yang nentuin —</div>
+
+<div class="receipt">
+  <div class="brand">
+    <div class="mark">AUDIT SLIP GAJI</div>
+    <div class="sub">Mindset · Skill Set · Value Added</div>
+  </div>
+  <div class="meta-row">
+    <span id="meta-date"></span>
+    <span id="meta-id">NO. AUDIT: —</span>
+  </div>
+
+  <!-- MODE SELECT -->
+  <div class="screen active" id="screen-mode">
+    <div class="intro">
+      <p>Sebelum mulai — biar pertanyaannya nyambung sama kondisi lo, pilih dulu posisi lo sekarang:</p>
+    </div>
+    <div class="mode-pick">
+      <button class="mode-card" onclick="selectMode('belum')">
+        <div class="mc-title">Belum Kerja</div>
+        <div class="mc-desc">Masih nyari kerjaan pertama, mau lulusan baru, lagi ganti karir, atau habis di-PHK.</div>
+      </button>
+      <button class="mode-card" onclick="selectMode('sudah')">
+        <div class="mc-title">Udah Kerja</div>
+        <div class="mc-desc">Lagi kerja sekarang, mau ngukur apa gaji lo udah sesuai sama value yang lo kasih.</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="screen" id="screen-intro">
+    <div class="intro">
+      <p>Ini bukan tes kepribadian. Ini audit jujur soal <b>apa lo emang layak dibayar segini, di atas ini, atau punya potensi jauh lebih tinggi.</b></p>
+      <ul class="pillars">
+        <li><span>01 — Mindset</span><span>cara lo mikir soal diri &amp; kerjaan</span></li>
+        <li><span>02 — Skill Set</span><span>hard skill + soft skill yang beneran kepake</span></li>
+        <li><span>03 — Value Added</span><span>dampak lo yang kerasa, bukan cuma hadir</span></li>
+      </ul>
+      <div class="honesty-note">
+        Tiap soal ada 4 pilihan reaksi. Nggak ada jawaban "benar" — pilih yang <b>paling jujur mendekati diri lo</b>, walau itu jawaban yang bikin lo agak malu ngakuinya. Justru di situ letak audit-nya.
+      </div>
+      <button class="primary" onclick="startQuiz()">Mulai Audit →</button>
+      <button class="ghost" onclick="showScreen('screen-mode')">← ganti posisi</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screen-quiz">
+    <div class="progress-line">
+      <span id="progress-text">SOAL 1 / 15</span>
+      <span id="progress-cat">MINDSET</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="category-tag" id="q-category">MINDSET</div>
+    <p class="question-text" id="q-text">...</p>
+    <div class="scale" id="q-scale"></div>
+    <button class="nav-back" id="btn-back" onclick="goBack()" style="visibility:hidden;">&larr; balik ke soal sebelumnya</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="stamp" id="stamp" style="display:none;"></div>
+    <div class="verdict-title" id="verdict-title"></div>
+    <p class="verdict-desc" id="verdict-desc"></p>
+
+    <div class="breakdown">
+      <div class="breakdown-row">
+        <div class="breakdown-label"><span>MINDSET</span><span id="score-mindset-txt">0/5</span></div>
+        <div class="bar-track"><div class="bar-fill" id="bar-mindset"></div></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="breakdown-label"><span>SKILL SET</span><span id="score-skill-txt">0/5</span></div>
+        <div class="bar-track"><div class="bar-fill" id="bar-skill"></div></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="breakdown-label"><span>VALUE ADDED</span><span id="score-value-txt">0/5</span></div>
+        <div class="bar-track"><div class="bar-fill" id="bar-value"></div></div>
+      </div>
+    </div>
+
+    <hr class="divider-dash">
+
+    <div class="advice-block" id="advice-block"></div>
+
+    <div class="cta-block" id="cta-block">
+      <div class="cta-eyebrow">Next Step</div>
+      <div class="cta-text" id="cta-text"></div>
+      <a class="follow-btn" id="cta-btn" href="#" target="_blank" rel="noopener">Follow di Instagram</a>
+    </div>
+
+    <div class="bio-block">
+      <div class="bio-eyebrow">Siapa yang bikin audit ini</div>
+      <div class="bio-text" id="bio-text"></div>
+      <div class="bio-stats">
+        <div><b>15+</b>tahun di dunia HR</div>
+        <div><b>1000+</b>orang dibantu lewat Program Pra Kerja</div>
+      </div>
+      <a id="bio-linkedin" href="#" target="_blank" rel="noopener" class="bio-linkedin-link">Lihat rekam jejak di LinkedIn →</a>
+    </div>
+
+    <button class="primary" onclick="shareResult()">Copy Hasil buat Di-share</button>
+    <button class="ghost" onclick="restartQuiz()">Audit Ulang</button>
+    <div class="footer-note">AUDIT SLIP GAJI — hasil ini cermin, bukan vonis.</div>
+  </div>
+
+</div>
+
+<script>
+/* ====== EDIT BAGIAN INI SESUAI AKUN & NAMA KAMU ====== */
+const SITE_CONFIG = {
+  displayName: 'Pangeran',
+  igHandle: '@pangeranambia',
+  igUrl: 'https://instagram.com/pangeranambia',
+  linkedinUrl: 'https://www.linkedin.com/in/pangeran-ambia/',
+  bio: 'Udah 15 tahun berkarir di dunia HR — dari staff sampai Regional HR Director — dan udah bantu 1000+ orang lewat Program Pra Kerja buat keluar dari jebakan gaji stuck. Semua pertanyaan di audit ini disusun dari pola yang gue lihat langsung dari ribuan kasus real, bukan teori dari buku.'
+};
+/* ====================================================== */
+
+document.getElementById('bio-text').textContent = SITE_CONFIG.bio;
+document.getElementById('cta-btn').href = SITE_CONFIG.igUrl;
+document.getElementById('bio-linkedin').href = SITE_CONFIG.linkedinUrl;
+
+const QUESTION_SETS = {
+  sudah: [
+    { cat:'mindset', text:'Waktu ditegur atau dikritik atasan soal kerjaan, reaksi lo yang paling sering:', opts:[
+      {t:'Yaudah, emang gue gak becus, ngapain belajar lagi toh usaha juga gak dihargai', v:1},
+      {t:'Kesel dulu, abis itu didiemin aja, jarang ditindaklanjutin', v:2},
+      {t:'Gue coba cerna pelan-pelan, walau kadang masih baper duluan', v:3},
+      {t:'Gue cari tau bagian mana yang salah, biar next time gak keulang', v:5},
+    ]},
+    { cat:'mindset', text:'Kalau dikasih kerjaan yang sebenernya bukan job desc lo:', opts:[
+      {t:'"Ini bukan kerjaan gue", kenapa harus gue yang ngerjain', v:1},
+      {t:'Gue kerjain, tapi sambil ngedumel', v:2},
+      {t:'Gue kerjain, tapi diem-diem nunggu diapresiasi', v:3},
+      {t:'Gue liat ini kesempatan buat belajar hal baru', v:5},
+    ]},
+    { cat:'mindset', text:'Soal belajar skill baru di luar jam kerja:', opts:[
+      {t:'Ngapain belajar lagi, gaji gue segini-gini aja kok', v:1},
+      {t:'Belajar kalau diwajibin kantor doang', v:2},
+      {t:'Kadang belajar kalau lagi mood atau ada waktu luang', v:3},
+      {t:'Gue nyari sendiri skill yang bikin gue lebih kepake', v:5},
+    ]},
+    { cat:'mindset', text:'Soal gaji lo sekarang, yang paling deket sama isi kepala lo:', opts:[
+      {t:'Gaji gue kecil karena perusahaan emang pelit, titik', v:1},
+      {t:'Ya emang segini-gini aja standarnya di sini', v:2},
+      {t:'Gue tau gaji nyambung sama value gue, tapi belum tau mulai dari mana', v:3},
+      {t:'Gue tau persis kenapa gue dibayar segini, dan apa yang perlu berubah', v:5},
+    ]},
+    { cat:'mindset', text:'Soal ancaman digantiin AI atau orang lain yang lebih murah:', opts:[
+      {t:'Ah itu isu doang, kerjaan gue aman-aman aja', v:1},
+      {t:'Kadang mikirin, terus dilupain lagi', v:2},
+      {t:'Kepikiran, tapi belum sempet dicari solusinya', v:3},
+      {t:'Gue rutin mikirin skill apa yang bikin gue susah digantiin', v:5},
+    ]},
+
+    { cat:'skill', text:'Soal keahlian teknis di bidang lo:', opts:[
+      {t:'Gue kerja standar aja, gak ada yang menonjol dari gue', v:1},
+      {t:'Ada, tapi biasa aja, sama kayak orang lain di tim', v:2},
+      {t:'Ada satu-dua hal yang lumayan gue kuasain', v:3},
+      {t:'Ada hal yang bikin orang nyariin gue duluan kalau ada masalah', v:5},
+    ]},
+    { cat:'skill', text:'Soal jelasin kerjaan lo ke orang dari divisi lain:', opts:[
+      {t:'Orang lain suka bingung sama penjelasan gue', v:1},
+      {t:'Kadang nyambung, kadang enggak', v:2},
+      {t:'Biasanya kepahamin, walau kadang muter-muter', v:3},
+      {t:'Gue bisa jelasin ke orang awam pakai bahasa yang gampang', v:5},
+    ]},
+    { cat:'skill', text:'Soal data/angka di kerjaan lo:', opts:[
+      {t:'Angka-angka gitu bukan urusan gue', v:1},
+      {t:'Gue liat doang, gak ngerti maksudnya', v:2},
+      {t:'Ngerti dikit-dikit, sering nanya orang', v:3},
+      {t:'Gue paham baca laporan performa dan tau apa yang harus dibenerin', v:5},
+    ]},
+    { cat:'skill', text:'Soal tools atau skill baru yang muncul:', opts:[
+      {t:'Nunggu training dikasih kantor, kalau enggak ya udah', v:1},
+      {t:'Pelajarin kalau lagi kepepet doang', v:2},
+      {t:'Kadang penasaran, tapi jarang ditindaklanjutin', v:3},
+      {t:'Gue coba pelajarin sendiri kalau relevan sama kerjaan gue', v:5},
+    ]},
+    { cat:'skill', text:'Soal mimpin atau koordinasi kerjaan kecil:', opts:[
+      {t:'Gue paling nyaman dikasih tau, bukan ngasih tau orang', v:1},
+      {t:'Bisa, tapi harus dipaksa dulu', v:2},
+      {t:'Kadang bisa handle, kadang keteteran', v:3},
+      {t:'Gue bisa koordinasi 2-3 orang tanpa harus micromanage', v:5},
+    ]},
+
+    { cat:'value', text:'Soal kontribusi di luar job desc lo:', opts:[
+      {t:'Gue kerja sesuai jobdesk doang, gak lebih gak kurang', v:1},
+      {t:'Kadang bantu-bantu, tapi gak signifikan', v:2},
+      {t:'Ada beberapa hal, tapi belum keliatan dampaknya', v:3},
+      {t:'Ada hal yang kalau ilang, tim beneran kerasa dampaknya', v:5},
+    ]},
+    { cat:'value', text:'Soal bukti hasil kerja lo:', opts:[
+      {t:'Gue kerja keras, itu aja buktinya', v:1},
+      {t:'Ada, tapi gak pernah didokumentasiin', v:2},
+      {t:'Ada beberapa contoh, tapi berserakan gak rapi', v:3},
+      {t:'Gue bisa nunjukin hasil kerja pakai data/angka konkret', v:5},
+    ]},
+    { cat:'value', text:'Soal ide atau inisiatif yang pernah lo kasih:', opts:[
+      {t:'Ide gue jarang didengerin', v:1},
+      {t:'Pernah dicoba, tapi gak dilanjutin', v:2},
+      {t:'Pernah dipakai, tapi skalanya kecil', v:3},
+      {t:'Ide gue pernah beneran ngubah cara kerja tim atau hasil bisnis', v:5},
+    ]},
+    { cat:'value', text:'Soal atasan tau kelebihan spesifik lo:', opts:[
+      {t:'Atasan kayaknya nganggep gue biasa aja', v:1},
+      {t:'Atasan tau gue rajin, tapi bukan kelebihan spesifik', v:2},
+      {t:'Atasan tau gue lumayan, tapi cuma segitu', v:3},
+      {t:'Atasan gue tau persis apa yang bikin gue beda dari yang lain', v:5},
+    ]},
+    { cat:'value', text:'Soal portofolio bukti kerja lo:', opts:[
+      {t:'Gue gak punya bukti apa-apa kalau ditanya kontribusi', v:1},
+      {t:'Ada di kepala doang, gak ada dokumentasinya', v:2},
+      {t:'Ada sedikit, tapi gak rapi', v:3},
+      {t:'Gue punya bukti kerja yang siap ditunjukin kapan aja', v:5},
+    ]},
+  ],
+
+  belum: [
+    { cat:'mindset', text:'Soal ditolak lamaran kerja:', opts:[
+      {t:'Yaudah, emang gue gak levelnya, ngapain coba lagi', v:1},
+      {t:'Kesel dulu, terus break lama banget baru coba lagi', v:2},
+      {t:'Sedih sebentar, abis itu lanjut apply tanpa dievaluasi', v:3},
+      {t:'Gue cari tau kenapa ditolak, terus gue benerin', v:5},
+    ]},
+    { cat:'mindset', text:'Soal belajar skill baru sebelum keterima kerja:', opts:[
+      {t:'Ngapain belajar duluan, nanti juga diajarin pas kerja', v:1},
+      {t:'Belajar kalau ada tugas kuliah doang', v:2},
+      {t:'Kadang belajar sendiri kalau lagi niat', v:3},
+      {t:'Gue belajar skill duluan sebelum ditanya pas interview', v:5},
+    ]},
+    { cat:'mindset', text:'Soal mikirin gaji dari sekarang:', opts:[
+      {t:'Yang penting keterima kerja dulu, gaji dipikir belakangan', v:1},
+      {t:'Gue pengen gaji gede tapi belum tau caranya gimana', v:2},
+      {t:'Gue udah mulai riset standar gaji, tapi belum action', v:3},
+      {t:'Gue riset standar gaji & requirement biar bisa negosiasi dari awal', v:5},
+    ]},
+    { cat:'mindset', text:'Soal feedback dari interview yang gagal:', opts:[
+      {t:'Gak digubris, di-skip aja', v:1},
+      {t:'Nyesek, tapi gak ditindaklanjuti', v:2},
+      {t:'Dicatat, tapi lupa lagi dipraktekin', v:3},
+      {t:'Gue evaluasi tiap interview biar makin siap next kali', v:5},
+    ]},
+    { cat:'mindset', text:'Soal takut kalah saing sama kandidat lain:', opts:[
+      {t:'Yaudah pasrah aja, susah saingan sama orang lain', v:1},
+      {t:'Suka mikirin, tapi gak ada tindakan', v:2},
+      {t:'Kepikiran, coba benerin CV doang', v:3},
+      {t:'Gue coba bangun skill/portofolio yang bikin gue beda dari kandidat lain', v:5},
+    ]},
+
+    { cat:'skill', text:'Soal skill teknis yang lo punya sekarang:', opts:[
+      {t:'Gue ngerasa masih kosong banget, belum ada yang dikuasain', v:1},
+      {t:'Ada dari kuliah doang, belum pernah dipraktekin', v:2},
+      {t:'Ada 1-2 skill yang lumayan', v:3},
+      {t:'Gue punya skill yang udah gue buktiin lewat project/sertifikasi', v:5},
+    ]},
+    { cat:'skill', text:'Soal cerita tentang diri lo pas interview:', opts:[
+      {t:'Gue susah cerita soal diri sendiri, suka blank', v:1},
+      {t:'Bisa ngomong, tapi belepotan', v:2},
+      {t:'Lumayan bisa jelasin diri, tapi masih grogi', v:3},
+      {t:'Gue bisa jelasin pengalaman/skill gue dengan jelas dan percaya diri', v:5},
+    ]},
+    { cat:'skill', text:'Soal paham industri/perusahaan yang lo tuju:', opts:[
+      {t:'Gue gak begitu ngerti industri yang gue mau masukin', v:1},
+      {t:'Tau dikit dari searching doang', v:2},
+      {t:'Lumayan paham, tapi belum dalam', v:3},
+      {t:'Gue paham gimana industri ini kerja & apa yang dicari perusahaan', v:5},
+    ]},
+    { cat:'skill', text:'Soal belajar tools/skill baru secara mandiri:', opts:[
+      {t:'Nunggu masuk kerja baru belajar', v:1},
+      {t:'Coba belajar, tapi gak pernah selesai', v:2},
+      {t:'Belajar beberapa hal lewat YouTube/kursus gratis', v:3},
+      {t:'Gue aktif belajar lewat kursus/sertifikasi/program yang relevan', v:5},
+    ]},
+    { cat:'skill', text:'Soal pengalaman organisasi/project kecil:', opts:[
+      {t:'Gue gak pernah ikut organisasi atau project apapun', v:1},
+      {t:'Pernah ikut, tapi pasif doang', v:2},
+      {t:'Pernah pegang tanggung jawab kecil', v:3},
+      {t:'Gue pernah mimpin/megang project kecil dan ada hasilnya', v:5},
+    ]},
+
+    { cat:'value', text:'Soal portofolio yang lo punya:', opts:[
+      {t:'Gue gak punya portofolio apa-apa', v:1},
+      {t:'Ada, tapi seadanya dan gak pernah di-update', v:2},
+      {t:'Ada beberapa, tapi belum representatif', v:3},
+      {t:'Gue punya portofolio yang nunjukin kemampuan gue secara konkret', v:5},
+    ]},
+    { cat:'value', text:'Soal pengalaman magang/freelance/project nyata:', opts:[
+      {t:'Belum pernah coba apa-apa di dunia kerja nyata', v:1},
+      {t:'Pernah magang/freelance, tapi gak signifikan', v:2},
+      {t:'Ada pengalaman, tapi hasilnya belum keliatan jelas', v:3},
+      {t:'Gue punya pengalaman nyata dengan hasil yang bisa diceritain', v:5},
+    ]},
+    { cat:'value', text:'Soal profil online (LinkedIn dll):', opts:[
+      {t:'Gue gak punya profil online yang niat', v:1},
+      {t:'Ada, tapi isinya kosong', v:2},
+      {t:'Ada isinya, tapi seadanya', v:3},
+      {t:'Gue punya profil yang niat dan gambarin value gue jelas', v:5},
+    ]},
+    { cat:'value', text:'Soal jawaban "kenapa harus gue" pas interview:', opts:[
+      {t:'Gue bingung jawab kalau ditanya kelebihan gue', v:1},
+      {t:'Ada jawaban, tapi generic banget', v:2},
+      {t:'Ada jawaban, tapi belum yakin sendiri', v:3},
+      {t:'Gue punya jawaban jelas & spesifik kenapa harus gue yang direkrut', v:5},
+    ]},
+    { cat:'value', text:'Soal riset ke perusahaan yang lo lamar:', opts:[
+      {t:'Gue asal apply, gak riset dulu', v:1},
+      {t:'Riset dikit doang sebelum interview', v:2},
+      {t:'Riset lumayan, tapi masih general', v:3},
+      {t:'Gue riset detail biar bisa nunjukin value spesifik ke perusahaan itu', v:5},
+    ]},
+  ]
+};
+
+let currentMode = 'sudah';
+let QUESTIONS = QUESTION_SETS.sudah;
+let current = 0;
+let answers = [];
+
+function pad(n){ return n.toString().padStart(2,'0'); }
+function setMeta(){
+  const d = new Date();
+  document.getElementById('meta-date').textContent = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+  document.getElementById('meta-id').textContent = 'NO. AUDIT: ' + Math.floor(100000 + Math.random()*899999);
+}
+setMeta();
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function selectMode(mode){
+  currentMode = mode;
+  QUESTIONS = QUESTION_SETS[mode];
+  showScreen('screen-intro');
+}
+
+function startQuiz(){
+  current = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function catLabel(cat){
+  return cat === 'mindset' ? 'MINDSET' : cat === 'skill' ? 'SKILL SET' : 'VALUE ADDED';
+}
+const LETTERS = ['A','B','C','D'];
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  document.getElementById('progress-text').textContent = `SOAL ${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('progress-cat').textContent = catLabel(q.cat);
+  document.getElementById('q-category').textContent = catLabel(q.cat);
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-fill').style.width = `${(current/QUESTIONS.length)*100}%`;
+  document.getElementById('btn-back').style.visibility = current === 0 ? 'hidden' : 'visible';
+
+  const scaleEl = document.getElementById('q-scale');
+  scaleEl.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.innerHTML = `<span class="letter">${LETTERS[i]}</span><span>${opt.t}</span>`;
+    btn.onclick = () => selectAnswer(opt.v);
+    scaleEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(val){
+  answers[current] = val;
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    computeResult();
+  }
+}
+
+function goBack(){
+  if(current > 0){ current--; renderQuestion(); }
+}
+
+function avgFor(cat){
+  const vals = QUESTIONS.map((q,i) => q.cat === cat ? answers[i] : null).filter(v => v !== null);
+  const sum = vals.reduce((a,b) => a+b, 0);
+  return vals.length ? sum / vals.length : 0;
+}
+
+function computeResult(){
+  const mindset = avgFor('mindset');
+  const skill = avgFor('skill');
+  const value = avgFor('value');
+  const overall = (mindset + skill + value) / 3;
+
+  let tier;
+  if(overall < 2.6){
+    tier = 'umr';
+  } else if(overall < 3.8 || value < 4){
+    tier = 'above';
+  } else {
+    tier = '2digit';
+  }
+
+  const CONTENT = {
+    umr: {
+      belum: {
+        stamp:'RAWAN\nMULAI DI UMR', color:'var(--stamp-red)',
+        title:'Posisi lo: Rawan Mulai di UMR',
+        desc:'Dari 3 pilar ini, belum ada yang cukup kuat buat "jual diri" lo di atas standar. Kemungkinan besar tawaran pertama yang lo dapet nanti ya UMR — bukan karena lo gak berbakat, tapi karena belum ada yang bisa lo tunjukin sebagai alasan buat dibayar lebih.',
+      },
+      sudah: {
+        stamp:'STANDAR\nUMR', color:'var(--stamp-red)',
+        title:'Posisi lo: Standar UMR',
+        desc:'Bukan berarti lo gak kompeten — tapi dari 3 pilar ini belum ada yang cukup menonjol buat "mendorong" gaji lo naik sendiri. Kemungkinan besar gaji lo naik selama ini karena aturan (UMR/inflasi), bukan karena atasan sadar lo susah digantiin.',
+      }
+    },
+    above: {
+      belum: {
+        stamp:'BERPOTENSI\nDI ATAS UMR', color:'var(--amber)',
+        title:'Posisi lo: Berpotensi Di Atas UMR',
+        desc:'Lo punya modal yang lumayan buat gak mulai dari titik paling bawah. Tapi biasanya satu pilar masih pincang — sering banget itu Value Added: belum ada bukti konkret yang bisa lo tunjukin ke recruiter kenapa harus lo yang dibayar lebih dari kandidat lain.',
+      },
+      sudah: {
+        stamp:'DI ATAS\nUMR', color:'var(--amber)',
+        title:'Posisi lo: Di Atas UMR',
+        desc:'Lo udah punya modal yang lumayan solid — entah dari mindset atau skill. Tapi biasanya yang nahan lo dari lompatan gede itu satu pilar yang masih pincang, sering banget itu Value Added: orang belum lihat dampak lo secara konkret.',
+      }
+    },
+    '2digit': {
+      belum: {
+        stamp:'POTENSI\nFAST-TRACK', color:'var(--stamp-green)',
+        title:'Posisi lo: Potensi Fast-Track ke 2 Digit',
+        desc:'Ketiga pilar lo udah di atas rata-rata buat orang yang belum kerja — dan Value Added lo juga udah kebentuk lewat portofolio/pengalaman nyata. Ini kombinasi yang jarang dipunya fresh graduate. Tinggal soal gimana lo posisiin diri biar dilihat, bukan lagi soal "layak apa nggak".',
+      },
+      sudah: {
+        stamp:'POTENSI\n2 DIGIT', color:'var(--stamp-green)',
+        title:'Posisi lo: Potensi Gaji 2 Digit',
+        desc:'Ketiga pilar lo udah di atas rata-rata, dan yang paling penting — Value Added lo juga kuat. Ini kombinasi langka: kebanyakan orang stuck karena kuat di satu-dua pilar doang. Tinggal soal positioning & negosiasi, bukan lagi soal "layak apa nggak".',
+      }
+    }
+  };
+
+  const c = CONTENT[tier][currentMode];
+  document.getElementById('verdict-title').textContent = c.title;
+  document.getElementById('verdict-desc').textContent = c.desc;
+
+  const stampEl = document.getElementById('stamp');
+  stampEl.style.display = 'block';
+  stampEl.style.setProperty('--stamp-color', c.color);
+  stampEl.innerHTML = c.stamp.replace('\n','<br>');
+
+  setBar('mindset', mindset);
+  setBar('skill', skill);
+  setBar('value', value);
+
+  renderAdvice(mindset, skill, value, tier);
+  renderCTA(tier);
+
+  showScreen('screen-result');
+}
+
+function setBar(key, score){
+  document.getElementById('bar-'+key).style.width = (score/5)*100 + '%';
+  document.getElementById('score-'+key+'-txt').textContent = score.toFixed(1) + '/5';
+}
+
+function renderAdvice(mindset, skill, value, tier){
+  const scores = [
+    { key:'mindset', label:'Mindset', val:mindset },
+    { key:'skill', label:'Skill Set', val:skill },
+    { key:'value', label:'Value Added', val:value },
+  ];
+  const weakest = scores.reduce((a,b) => a.val <= b.val ? a : b);
+
+  const tips = {
+    mindset: 'Fokus 30 hari ke depan: tiap kali dikasih tugas di luar job desc atau kena kritik, catat reaksi otomatis lo. Ganti "ini bukan kerjaan gue" jadi "apa yang bisa gue ambil dari ini". Mindset nggak berubah dari niat, tapi dari ngulang reaksi baru sampai jadi otomatis.',
+    skill: 'Pilih satu hard skill yang paling relevan sama arah karir lo, dalemin sampe orang lain beneran nyariin lo buat itu. Skill yang "cukup tau" nggak ngangkat gaji — skill yang bikin lo dicari yang ngangkat.',
+    value: 'Mulai dokumentasiin dampak kerjaan/project lo — angka, before-after, testimoni. Bukan buat pamer, tapi karena orang gak bisa hargai kontribusi yang mereka gak sadar ada. Value yang gak keliatan, dianggap gak ada.',
+  };
+
+  let html = `<b>Yang paling nahan lo sekarang: ${weakest.label}</b>${tips[weakest.key]}`;
+  if(tier === '2digit'){
+    html = `<b>Langkah selanjutnya bukan lagi "benerin diri"</b>Ketiga pilar lo udah kuat — PR-nya sekarang soal positioning: apakah orang yang nentuin gaji lo tau value ini, atau cuma lo doang yang tau? Kalau belum, itu alasan lo belum dibayar sesuai kapasitas.`;
+  }
+  document.getElementById('advice-block').innerHTML = html;
+}
+
+function renderCTA(tier){
+  const CTA = {
+    umr: `Kamu masih di fase awal, dan itu wajar — asal jangan berhenti di situ. Follow ${SITE_CONFIG.igHandle} dan ikutin <b>Tantangan 30 Hari Keluar dari Jebakan UMR</b>: program harian buat benerin 3 pilar ini satu-satu, step by step.`,
+    above: `Kamu punya modal buat nembus gaji 2 digit — tapi itu potensi masih perlu dibongkar caranya. Follow ${SITE_CONFIG.igHandle}, aku rutin bahas gimana cara positioning value kamu biar dihargai sesuai kapasitas, bukan cuma sesuai jabatan di kertas.`,
+    '2digit': `Kamu udah di titik yang jarang dicapai orang. PR-nya sekarang bukan "belajar dari nol" lagi, tapi soal positioning & negosiasi. Follow ${SITE_CONFIG.igHandle} buat strategi lanjutan biar potensi ini beneran cair jadi angka di slip gaji kamu.`,
+  };
+  document.getElementById('cta-text').innerHTML = CTA[tier];
+}
+
+function restartQuiz(){
+  setMeta();
+  showScreen('screen-mode');
+}
+
+function shareResult(){
+  const title = document.getElementById('verdict-title').textContent;
+  const m = document.getElementById('score-mindset-txt').textContent;
+  const s = document.getElementById('score-skill-txt').textContent;
+  const v = document.getElementById('score-value-txt').textContent;
+  const text = `AUDIT SLIP GAJI\n${title}\n\nMindset: ${m}\nSkill Set: ${s}\nValue Added: ${v}\n\ncek punya lo juga, follow ${SITE_CONFIG.igHandle} →`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const original = btn.textContent;
+    btn.textContent = 'Ke-copy! ✓';
+    setTimeout(() => btn.textContent = original, 1500);
+  }).catch(() => { alert(text); });
+}
+</script>
+
+</body>
+</html>
